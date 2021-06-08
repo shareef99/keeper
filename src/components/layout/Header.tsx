@@ -6,8 +6,7 @@ const Header = (props: Props) => {
     return (
         <header>
             <h1>
-                {" "}
-                <HighlightIcon /> Keeper
+                <HighlightIcon className="mb-2" /> Keeper
             </h1>
         </header>
     );

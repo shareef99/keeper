@@ -1,0 +1,25 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: "Montserrat", sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: rgb(138, 131, 131);
+    padding: 0;
+    width: 100%;
+    /* background-color: #008c41; */
+    background-image: url("https://www.transparenttextures.com/patterns/asfalt-light.png");
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
+
+li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
