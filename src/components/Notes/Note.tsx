@@ -1,3 +1,5 @@
+import { Delete } from "@material-ui/icons";
+
 interface Props {
     id: number;
     title: string;
@@ -14,7 +16,9 @@ const Note = ({ id, title, content, onDeleteNote }: Props) => {
         <li className="note">
             <h1>{title}</h1>
             <p>{content}</p>
-            <button onClick={handleDeleteNote}>DELETE</button>
+            <button onClick={handleDeleteNote}>
+                <Delete />
+            </button>
         </li>
     );
 };

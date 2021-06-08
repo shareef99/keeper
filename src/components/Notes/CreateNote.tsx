@@ -1,5 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { NoteType } from "../../interface/note";
+import AddIcon from "@material-ui/icons/Add";
+import Fab from "@material-ui/core/Fab";
+import Zoom from "@material-ui/core/Zoom";
 
 interface Props {
     onAddNote: (note: NoteType) => void;
@@ -8,6 +11,7 @@ interface Props {
 const CreateNote = ({ onAddNote }: Props) => {
     // States
     const [note, setNote] = useState<NoteType>({ title: "", content: "" });
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     // Handlers
     const updateNote = (
@@ -24,21 +28,28 @@ const CreateNote = ({ onAddNote }: Props) => {
     };
 
     return (
-        <form onSubmit={submitNote}>
-            <input
-                name="title"
-                value={note.title}
-                placeholder="Title"
-                onChange={updateNote}
-            />
+        <form onSubmit={submitNote} className="create-note">
+            {isExpanded && (
+                <input
+                    name="title"
+                    value={note.title}
+                    placeholder="Title"
+                    onChange={updateNote}
+                />
+            )}
             <textarea
                 name="content"
                 value={note.content}
                 placeholder="Take a note..."
-                rows={3}
+                rows={isExpanded ? 3 : 1}
+                onClick={() => setIsExpanded(true)}
                 onChange={updateNote}
             />
-            <button type="submit">Add</button>
+            <Zoom in={isExpanded}>
+                <Fab type="submit">
+                    <AddIcon />
+                </Fab>
+            </Zoom>
         </form>
     );
 };
