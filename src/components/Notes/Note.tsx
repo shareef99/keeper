@@ -1,10 +1,13 @@
-interface Props {}
+interface Props {
+    title: string;
+    content: string;
+}
 
-const Note = (props: Props) => {
+const Note = ({ title, content }: Props) => {
     return (
         <div className="note">
-            <h1>This is the note title </h1>
-            <p>This is the note content</p>
+            <h1>{title}</h1>
+            <p>{content}</p>
         </div>
     );
 };
