@@ -5,10 +5,10 @@ interface Props {
 
 const Note = ({ title, content }: Props) => {
     return (
-        <div className="note">
+        <li className="note">
             <h1>{title}</h1>
             <p>{content}</p>
-        </div>
+        </li>
     );
 };
 
