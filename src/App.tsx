@@ -14,6 +14,12 @@ function App() {
         setNotes((prevNotes) => [...prevNotes, note]);
     };
 
+    const deleteNote = (id: number) => {
+        setNotes((prevNotes) =>
+            prevNotes.filter((note, index) => index !== id)
+        );
+    };
+
     return (
         <Fragment>
             <Header />
@@ -23,8 +29,10 @@ function App() {
                     {notes.map((note, index) => (
                         <Note
                             key={index}
+                            id={index}
                             title={note.title}
                             content={note.content}
+                            onDeleteNote={deleteNote}
                         />
                     ))}
                 </ul>

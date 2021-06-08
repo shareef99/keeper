@@ -1,14 +1,20 @@
 interface Props {
+    id: number;
     title: string;
     content: string;
+    onDeleteNote: (id: number) => void;
 }
 
-const Note = ({ title, content }: Props) => {
+const Note = ({ id, title, content, onDeleteNote }: Props) => {
+    const handleDeleteNote = () => {
+        onDeleteNote(id);
+    };
+
     return (
         <li className="note">
             <h1>{title}</h1>
             <p>{content}</p>
-            <button>DELETE</button>
+            <button onClick={handleDeleteNote}>DELETE</button>
         </li>
     );
 };
