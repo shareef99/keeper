@@ -19,6 +19,7 @@ const CreateNote = ({ onAddNote }: Props) => {
 
     const submitNote = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setNote({ title: "", content: "" });
         onAddNote(note);
     };
 

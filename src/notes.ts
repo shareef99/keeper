@@ -1,4 +1,4 @@
-const notes = [
+const dummyNotes = [
     {
         title: "Delegation",
         content:
@@ -21,4 +21,4 @@ const notes = [
     },
 ];
 
-export default notes;
+export default dummyNotes;
