@@ -1,10 +1,11 @@
-import { Fragment, useState } from "react";
-import Footer from "./components/layout/Footer";
-import Header from "./components/layout/Header";
+import { useState } from "react";
 import CreateNote from "./components/Notes/CreateNote";
 import Note from "./components/Notes/Note";
 import { NoteType } from "./interface/note";
 import dummyNotes from "./notes";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Home from "./Home";
+import Layout from "./components/layout/Layout";
 
 function App() {
     // States
@@ -21,24 +22,27 @@ function App() {
     };
 
     return (
-        <Fragment>
-            <Header />
-            <main>
-                <CreateNote onAddNote={addNote} />
-                <ul>
-                    {notes.map((note, index) => (
-                        <Note
-                            key={index}
-                            id={index}
-                            title={note.title}
-                            content={note.content}
-                            onDeleteNote={deleteNote}
-                        />
-                    ))}
-                </ul>
-            </main>
-            <Footer />
-        </Fragment>
+        <Router>
+            <Layout>
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    {/* Place a route at the bottom with path "/" under switch to catch 404 page */}
+                    <Route path="/" render={() => <h1>404</h1>} />
+                    <CreateNote onAddNote={addNote} />
+                    <ul>
+                        {notes.map((note, index) => (
+                            <Note
+                                key={index}
+                                id={index}
+                                title={note.title}
+                                content={note.content}
+                                onDeleteNote={deleteNote}
+                            />
+                        ))}
+                    </ul>
+                </Switch>
+            </Layout>
+        </Router>
     );
 }
 
