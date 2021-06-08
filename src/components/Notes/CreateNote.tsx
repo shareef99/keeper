@@ -1,11 +1,43 @@
-interface Props {}
+import { ChangeEvent, FormEvent, useState } from "react";
+import { NoteType } from "../../interface/note";
 
-const CreateNote = (props: Props) => {
+interface Props {
+    onAddNote: (note: NoteType) => void;
+}
+
+const CreateNote = ({ onAddNote }: Props) => {
+    // States
+    const [note, setNote] = useState<NoteType>({ title: "", content: "" });
+
+    // Handlers
+    const updateNote = (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const { name, value } = e.target;
+        setNote((prevNote) => ({ ...prevNote, [name]: value }));
+    };
+
+    const submitNote = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        onAddNote(note);
+    };
+
     return (
-        <form>
-            <input name="title" placeholder="Title" />
-            <textarea name="content" placeholder="Take a note..." rows={3} />
-            <button>Add</button>
+        <form onSubmit={submitNote}>
+            <input
+                name="title"
+                value={note.title}
+                placeholder="Title"
+                onChange={updateNote}
+            />
+            <textarea
+                name="content"
+                value={note.content}
+                placeholder="Take a note..."
+                rows={3}
+                onChange={updateNote}
+            />
+            <button type="submit">Add</button>
         </form>
     );
 };

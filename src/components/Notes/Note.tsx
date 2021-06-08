@@ -8,6 +8,7 @@ const Note = ({ title, content }: Props) => {
         <li className="note">
             <h1>{title}</h1>
             <p>{content}</p>
+            <button>DELETE</button>
         </li>
     );
 };
