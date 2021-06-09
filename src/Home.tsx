@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import Typed from "typed.js";
 import "./styles/pages/home.scss";
 
@@ -51,7 +52,9 @@ const Home = (props: Props) => {
                     bg-gradient-to-b from-yellow-300 via-yellow-300 to-yellow-400 font-black text-xl
                     hover:from-yellow-400 hover:to-yellow-300 shadow-md"
             >
-                <button>Go To Keep &#10230;</button>
+                <Link to="/keeper">
+                    <button>Go To Keep &#10230;</button>
+                </Link>
             </div>
         </section>
     );
