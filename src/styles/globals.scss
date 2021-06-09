@@ -1,3 +1,16 @@
+:root {
+    --gray: #eee;
+    --gary-shade: #ccc;
+    --light-black-shade: rgb(138, 131, 131);
+    --yellow: #f5ba13;
+    --yellow-200: #fde68a;
+    --yellow-300: rgba(252, 211, 77);
+    --yellow-400: #fbbf24;
+    --shadow-dark: rgba(0, 0, 0, 0.3);
+    --shadow-light: rgb(138, 137, 137);
+    --white: #fff;
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -10,10 +23,9 @@ html {
 }
 
 body {
-    background: rgb(138, 131, 131);
+    background: var(--light-black-shade);
     padding: 0;
     width: 100%;
-    /* background-color: #008c41; */
     background-image: url("https://www.transparenttextures.com/patterns/asfalt-light.png");
     /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
@@ -22,4 +34,107 @@ li {
     list-style: none;
     padding: 0;
     margin: 0;
+}
+
+button:focus,
+a:focus {
+    outline: none;
+}
+
+header {
+    background-color: var(--yellow);
+    padding: 16px 32px;
+    box-shadow: 0 0 10px 0 var(--shadow-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header h1 {
+    color: var(--white);
+    font-family: "McLaren", cursive;
+    font-weight: 200;
+    font-size: 2rem;
+}
+
+footer {
+    position: absolute;
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
+}
+
+footer p {
+    color: var(--gary-shade);
+}
+
+.note {
+    background: var(--white);
+    border-radius: 7px;
+    box-shadow: 0 2px 5px var(--gary-shade);
+    padding: 10px;
+    width: 240px;
+    margin: 16px;
+    float: left;
+}
+
+.note h1 {
+    font-size: 1.1em;
+    margin-bottom: 6px;
+}
+
+.note p {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.note button {
+    position: relative;
+    float: right;
+    margin-right: 10px;
+    color: var(--yellow);
+    border: none;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    outline: none;
+}
+
+form.create-note {
+    position: relative;
+    width: 480px;
+    margin: 30px auto 20px auto;
+    background: var(--white);
+    padding: 15px;
+    border-radius: 7px;
+    box-shadow: 0 1px 5px var(--shadow-light);
+}
+
+form.create-note input,
+form.create-note textarea {
+    width: 100%;
+    border: none;
+    padding: 4px;
+    outline: none;
+    font-size: 1.2em;
+    font-family: inherit;
+    resize: none;
+}
+
+form.create-note button {
+    position: absolute;
+    right: 18px;
+    bottom: -18px;
+    background: var(--yellow);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    box-shadow: 0 1px 3px var(--shadow-dark);
+    cursor: pointer;
+    outline: none;
 }

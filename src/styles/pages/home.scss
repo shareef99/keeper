@@ -1,0 +1,15 @@
+body {
+    // Over riding global body background patter
+    background: #eee;
+}
+
+.typed-cursor {
+    background-image: linear-gradient(
+        to bottom,
+        var(--yellow-200),
+        var(--yellow-300),
+        var(--yellow-400)
+    );
+    // background-image: linear-gradient(to bottom, var(--yellow-200));
+    padding: 0.5rem;
+}
