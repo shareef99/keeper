@@ -19,7 +19,7 @@ interface Props {
 }
 
 export function AuthProvider({ children }: Props) {
-    const user = false;
+    const user = true;
 
     const value = {
         user,
