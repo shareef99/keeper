@@ -47,33 +47,24 @@ export function AuthProvider({ children }: Props) {
     const [user, setUser] = useState<UserType>();
 
     // Methods/Functions
-    const login = () => {
+    const login = async () => {
         const provider = new firebase.auth.GoogleAuthProvider();
 
-        firebase
-            .auth()
-            .signInWithPopup(provider)
-            .then((result) => {
-                const { user, additionalUserInfo } = result;
-                setUser({
-                    uid: user?.uid!,
-                    email: user?.email!,
-                    name: user?.displayName!,
-                    imgURL: user?.photoURL!,
-                    isNewUser: additionalUserInfo?.isNewUser!,
-                    signInMethod: user?.providerId!,
-                    isAnonymous: user?.isAnonymous,
-                    createdTime: convertDateToINS(
-                        user?.metadata?.creationTime!
-                    ),
-                    lastSignInTime: convertDateToINS(
-                        user?.metadata?.lastSignInTime!
-                    ),
-                });
-            })
-            .then(() => {
-                history.push(`/keeper/${user?.name}`);
-            });
+        const result = await firebase.auth().signInWithPopup(provider);
+        const { user, additionalUserInfo } = result;
+        setUser({
+            uid: user?.uid!,
+            email: user?.email!,
+            name: user?.displayName!,
+            imgURL: user?.photoURL!,
+            isNewUser: additionalUserInfo?.isNewUser!,
+            signInMethod: user?.providerId!,
+            isAnonymous: user?.isAnonymous,
+            createdTime: convertDateToINS(user?.metadata?.creationTime!),
+            lastSignInTime: convertDateToINS(user?.metadata?.lastSignInTime!),
+        });
+
+        history.push(`/keeper/${user?.displayName}`);
     };
 
     const logout = async () => {
