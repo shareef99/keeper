@@ -13,10 +13,6 @@ const Home = (props: Props) => {
     // Context
     const { user, login } = useAuth();
 
-    // States
-
-    // Handlers
-
     // Effects
     useEffect(() => {
         const typed = new Typed(el.current!, {
@@ -71,7 +67,8 @@ const Home = (props: Props) => {
                 ) : (
                     <div
                         className="border-4 border-gray-400 rowCenter space-x-2 px-4 py-2 rounded-md
-                            hover:bg-gray-400 cursor-pointer hover:text-gray-800 mb-12"
+                            hover:bg-gray-400 cursor-pointer hover:text-gray-800 
+                            "
                         onClick={login}
                     >
                         <FcGoogle size="2rem" />
