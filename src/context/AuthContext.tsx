@@ -1,4 +1,4 @@
-import { firebase } from "../firebase/config";
+import { db, firebase } from "../firebase/config";
 import {
     createContext,
     ReactNode,
@@ -15,6 +15,7 @@ interface authContextType {
     user: UserType | undefined;
     login: () => void;
     logout: () => void;
+    error: string | undefined;
 }
 
 const authContextDefaultValues: authContextType = {
@@ -30,6 +31,7 @@ const authContextDefaultValues: authContextType = {
     },
     login: () => {},
     logout: () => {},
+    error: "",
 };
 
 const AuthContext = createContext<authContextType>(authContextDefaultValues);
@@ -45,26 +47,42 @@ interface Props {
 export function AuthProvider({ children }: Props) {
     const history = useHistory();
     const [user, setUser] = useState<UserType>();
+    const [error, setError] = useState<string | undefined>();
 
     // Methods/Functions
     const login = async () => {
         const provider = new firebase.auth.GoogleAuthProvider();
 
-        const result = await firebase.auth().signInWithPopup(provider);
-        const { user, additionalUserInfo } = result;
-        setUser({
-            uid: user?.uid!,
-            email: user?.email!,
-            name: user?.displayName!,
-            imgURL: user?.photoURL!,
-            isNewUser: additionalUserInfo?.isNewUser!,
-            signInMethod: user?.providerId!,
-            isAnonymous: user?.isAnonymous,
-            createdTime: convertDateToINS(user?.metadata?.creationTime!),
-            lastSignInTime: convertDateToINS(user?.metadata?.lastSignInTime!),
-        });
+        try {
+            const result = await firebase.auth().signInWithPopup(provider);
+            const { user, additionalUserInfo } = result;
 
-        history.push(`/keeper/${user?.displayName}`);
+            const userValues = {
+                uid: user?.uid!,
+                email: user?.email!,
+                name: user?.displayName!,
+                imgURL: user?.photoURL!,
+                isNewUser: additionalUserInfo?.isNewUser!,
+                signInMethod: user?.providerId!,
+                isAnonymous: user?.isAnonymous,
+                createdTime: convertDateToINS(user?.metadata?.creationTime!),
+                lastSignInTime: convertDateToINS(
+                    user?.metadata?.lastSignInTime!
+                ),
+            };
+
+            setUser(userValues);
+
+            try {
+                await db.collection("users").doc(user?.uid).set(userValues);
+
+                history.push(`/keeper/${user?.displayName}`);
+            } catch (err) {
+                setError(err || "Failed to save user data!");
+            }
+        } catch (err) {
+            setError(err || "Failed to login");
+        }
     };
 
     const logout = async () => {
@@ -101,6 +119,7 @@ export function AuthProvider({ children }: Props) {
         user,
         login,
         logout,
+        error,
     };
 
     return (

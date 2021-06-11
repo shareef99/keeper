@@ -29,7 +29,7 @@ const Notes = (props: Props) => {
         <section>
             <div>
                 <CreateNote onAddNote={addNote} />
-                <ul>
+                <ul className="flex justify-center flex-wrap items-start">
                     {notes.map((note, index) => (
                         <Note
                             key={index}
