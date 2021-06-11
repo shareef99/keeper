@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CreateNote from "./components/Notes/CreateNote";
 import Note from "./components/Notes/Note";
-import { NoteType } from "./interface/note";
+import { NoteType } from "./interface";
 import dummyNotes from "./notes";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./Home";
