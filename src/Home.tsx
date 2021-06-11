@@ -1,13 +1,23 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import Typed from "typed.js";
-import "./styles/pages/home.scss";
+import { useAuth } from "./context/AuthContext";
+import { FcGoogle } from "react-icons/fc";
 
 interface Props {}
 
 const Home = (props: Props) => {
+    // Refs
     const el = useRef<HTMLSpanElement>(null);
 
+    // Context
+    const { user, login } = useAuth();
+
+    // States
+
+    // Handlers
+
+    // Effects
     useEffect(() => {
         const typed = new Typed(el.current!, {
             strings: ["thoughts", "schedule", "secrets", "plans", "notes"],
@@ -47,14 +57,29 @@ const Home = (props: Props) => {
                     <span className="inline-block md:mt-12">in keeper</span>
                 </h1>
             </div>
-            <div
-                className="self-start place-self-center md:self-center px-3 py-2 rounded-md
-                    bg-gradient-to-b from-yellow-300 via-yellow-300 to-yellow-400 font-black text-xl
-                    hover:from-yellow-400 hover:to-yellow-300 shadow-md"
-            >
-                <Link to="/keeper">
-                    <button>Go To Keep &#10230;</button>
-                </Link>
+            <div className="self-start place-self-center md:self-center">
+                {user ? (
+                    <div
+                        className="px-3 py-2 rounded-md font-black text-xl shadow-md
+                            bg-gradient-to-b from-yellow-300 via-yellow-300 to-yellow-400
+                            hover:from-yellow-400 hover:to-yellow-300 "
+                    >
+                        <Link to={`/keeper/${user.name}`}>
+                            <button>Go To Keep &#10230;</button>
+                        </Link>
+                    </div>
+                ) : (
+                    <div
+                        className="border-4 border-gray-400 rowCenter space-x-2 px-4 py-2 rounded-md
+                            hover:bg-gray-400 cursor-pointer hover:text-gray-800 mb-12"
+                        onClick={login}
+                    >
+                        <FcGoogle size="2rem" />
+                        <button className="font-medium text-xl">
+                            continue with Google
+                        </button>
+                    </div>
+                )}
             </div>
         </section>
     );

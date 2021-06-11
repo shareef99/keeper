@@ -8,11 +8,13 @@ import {
 } from "react";
 import { UserType } from "../interface";
 import { convertDateToINS } from "../helpers/context";
+import { useHistory } from "react-router-dom";
 // import firebase from "firebase";
 
 interface authContextType {
     user: UserType | undefined;
     login: () => void;
+    logout: () => void;
 }
 
 const authContextDefaultValues: authContextType = {
@@ -27,6 +29,7 @@ const authContextDefaultValues: authContextType = {
         lastSignInTime: "",
     },
     login: () => {},
+    logout: () => {},
 };
 
 const AuthContext = createContext<authContextType>(authContextDefaultValues);
@@ -40,8 +43,10 @@ interface Props {
 }
 
 export function AuthProvider({ children }: Props) {
+    const history = useHistory();
     const [user, setUser] = useState<UserType>();
 
+    // Methods/Functions
     const login = () => {
         const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -65,15 +70,28 @@ export function AuthProvider({ children }: Props) {
                         user?.metadata?.lastSignInTime!
                     ),
                 });
+            })
+            .then(() => {
+                history.push(`/keeper/${user?.name}`);
             });
+    };
+
+    const logout = async () => {
+        await firebase.auth().signOut();
+
+        history.push("/");
     };
 
     // Effects
     // This useEffect will check for the already login user
     useEffect(() => {
         firebase.auth().onAuthStateChanged((user) => {
+            if (!user?.email) {
+                return setUser(undefined);
+            }
+
             setUser({
-                uid: user?.uid!,
+                uid: user?.uid,
                 email: user?.email!,
                 name: user?.displayName!,
                 imgURL: user?.photoURL!,
@@ -88,13 +106,10 @@ export function AuthProvider({ children }: Props) {
         });
     }, []);
 
-    useEffect(() => {
-        console.log(user);
-    }, [user]);
-
     const value = {
         user,
         login,
+        logout,
     };
 
     return (

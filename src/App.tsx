@@ -8,7 +8,6 @@ import Home from "./Home";
 import Layout from "./components/layout/Layout";
 import Notes from "./keeper/Notes";
 import { AuthProvider } from "./context/AuthContext";
-import Login from "./components/Login";
 
 function App() {
     // States
@@ -30,8 +29,11 @@ function App() {
                 <AuthProvider>
                     <Switch>
                         <Route exact path="/" component={Home} />
-                        <Route exact path="/keeper" component={Notes} />
-                        <Route exact path="/login" component={Login} />
+                        <Route
+                            exact
+                            path="/keeper/:userName"
+                            component={Notes}
+                        />
                         {/* Place a route at the bottom with path "/" under switch to catch 404 page */}
                         <Route path="/" render={() => <h1>404</h1>} />
                         <CreateNote onAddNote={addNote} />
