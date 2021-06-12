@@ -1,10 +1,10 @@
 import { useAuth } from "../context/AuthContext";
 import CreateNote from "../components/Notes/CreateNote";
 import { NoteType } from "../interface";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Note from "../components/Notes/Note";
 import { db } from "../firebase/config";
-import { getNotesRef } from "../helpers/notes";
+import Zoom from "@material-ui/core/Zoom";
 
 interface Props {}
 
@@ -16,23 +16,25 @@ const Notes = (props: Props) => {
     const [notes, setNotes] = useState<Array<NoteType>>([]);
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-    db.collection("users")
-        .doc(user?.uid)
-        .collection("notes")
-        .onSnapshot((snap) =>
-            setNotes(
-                snap.docs.map((doc) => ({
-                    id: doc.data().id,
-                    title: doc.data().title,
-                    content: doc.data().content,
-                }))
-            )
-        );
+    useEffect(() => {
+        db.collection("users")
+            .doc(user?.uid)
+            .collection("notes")
+            .onSnapshot((snap) =>
+                setNotes(
+                    snap.docs.map((doc) => ({
+                        id: doc.data().id,
+                        title: doc.data().title,
+                        content: doc.data().content,
+                    }))
+                )
+            );
+    }, [user?.uid]);
 
     const addNote = async (note: NoteType) => {
         let { title, content } = note;
 
-        const id = title + Math.floor(Math.random() * 1000000);
+        const id = title + Math.floor(Math.random() * 10000000);
 
         if (title === "") {
             title = "untitled";
@@ -47,11 +49,12 @@ const Notes = (props: Props) => {
     };
 
     const deleteNote = async (id: string) => {
-        const notesRef = getNotesRef(user?.uid!);
-
-        await notesRef.doc(id).delete();
-
-        console.log("Deleted");
+        await db
+            .collection("users")
+            .doc(user?.uid)
+            .collection("notes")
+            .doc(id)
+            .delete();
     };
 
     return (
@@ -66,6 +69,14 @@ const Notes = (props: Props) => {
             >
                 <CreateNote onAddNote={addNote} isExpanded={isExpanded} />
                 <ul className="flex justify-center flex-wrap items-start">
+                    {notes.length < 1 && (
+                        <Zoom in={true}>
+                            <li className="font-medium text-2xl my-40 text-center px-2">
+                                Welcome to keeper, anything in mind? Write it
+                                down
+                            </li>
+                        </Zoom>
+                    )}
                     {notes.map((note, index) => (
                         <Note
                             key={index}
