@@ -5,6 +5,8 @@ import { NoteFormType, NoteType } from "../../interface";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Zoom from "@material-ui/core/Zoom";
+import { db } from "../../firebase/config";
+import { useAuth } from "../../context/AuthContext";
 
 interface Props {
     onAddNote: (note: NoteType) => void;
@@ -17,17 +19,38 @@ const CreateNote = ({ onAddNote }: Props) => {
         content: "",
     };
 
+    // Context
+    const { user } = useAuth();
+
     // States
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     // Handlers
-    const submitNote = (
+    const submitNote = async (
         values: NoteFormType,
         actions: FormikHelpers<NoteFormType>
     ) => {
+        let { title, content } = values;
+
+        if (!content || content === "") {
+            return;
+        }
+
+        const id = title + Math.floor(Math.random() * 1000000);
+
+        if (title === "") {
+            title = "untitled";
+        }
+
+        await db
+            .collection("users")
+            .doc(user?.uid)
+            .collection("notes")
+            .doc(id)
+            .set({ title, content, id });
+
         console.log(values);
 
-        // setNote({ title: "", content: "" });
         onAddNote(values);
         actions.setSubmitting(false);
     };
@@ -57,7 +80,7 @@ const CreateNote = ({ onAddNote }: Props) => {
                     onClick={() => setIsExpanded(true)}
                     className="w-full border-none p-1 outline-none resize-none text-lg bg-gray-200"
                 />
-                <Zoom in={isExpanded}>
+                <Zoom in={isExpanded} style={{ transitionDelay: "500ms" }}>
                     <Fab
                         type="submit"
                         style={{
