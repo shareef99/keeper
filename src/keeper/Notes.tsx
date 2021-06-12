@@ -2,9 +2,8 @@ import { useAuth } from "../context/AuthContext";
 import CreateNote from "../components/Notes/CreateNote";
 import { NoteType } from "../interface";
 import { useState } from "react";
-import dummyNotes from "../notes";
 import Note from "../components/Notes/Note";
-// import { db } from "../firebase/config";
+import { db } from "../firebase/config";
 
 interface Props {}
 
@@ -13,7 +12,20 @@ const Notes = (props: Props) => {
     const { user, logout } = useAuth();
 
     // State
-    const [notes, setNotes] = useState<Array<NoteType>>(dummyNotes);
+    const [notes, setNotes] = useState<Array<NoteType>>([]);
+
+    db.collection("users")
+        .doc(user?.uid)
+        .collection("notes")
+        .onSnapshot((snap) =>
+            setNotes(
+                snap.docs.map((doc) => ({
+                    id: doc.data().id,
+                    title: doc.data().title,
+                    content: doc.data().content,
+                }))
+            )
+        );
 
     const addNote = (note: NoteType) => {
         setNotes((prevNotes) => [...prevNotes, note]);

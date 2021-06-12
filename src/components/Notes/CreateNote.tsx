@@ -1,6 +1,5 @@
-import { ChangeEvent, useState } from "react";
-import { Formik, Form, Field, FormikHelpers, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { useState } from "react";
+import { Formik, Form, Field, FormikHelpers } from "formik";
 import { NoteFormType, NoteType } from "../../interface";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
@@ -51,7 +50,6 @@ const CreateNote = ({ onAddNote }: Props) => {
 
         console.log(values);
 
-        onAddNote(values);
         actions.setSubmitting(false);
     };
 
