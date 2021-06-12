@@ -4,6 +4,7 @@ import { NoteType } from "../interface";
 import { useState } from "react";
 import Note from "../components/Notes/Note";
 import { db } from "../firebase/config";
+import { getNotesRef } from "../helpers/notes";
 
 interface Props {}
 
@@ -27,14 +28,29 @@ const Notes = (props: Props) => {
             )
         );
 
-    const addNote = (note: NoteType) => {
-        setNotes((prevNotes) => [...prevNotes, note]);
+    const addNote = async (note: NoteType) => {
+        let { title, content } = note;
+
+        const id = title + Math.floor(Math.random() * 1000000);
+
+        if (title === "") {
+            title = "untitled";
+        }
+
+        await db
+            .collection("users")
+            .doc(user?.uid)
+            .collection("notes")
+            .doc(id)
+            .set({ title, content, id });
     };
 
-    const deleteNote = (id: number) => {
-        setNotes((prevNotes) =>
-            prevNotes.filter((note, index) => index !== id)
-        );
+    const deleteNote = async (id: string) => {
+        const notesRef = getNotesRef(user?.uid!);
+
+        await notesRef.doc(id).delete();
+
+        console.log("Deleted");
     };
 
     return (
@@ -45,7 +61,8 @@ const Notes = (props: Props) => {
                     {notes.map((note, index) => (
                         <Note
                             key={index}
-                            id={index}
+                            id={note.id!}
+                            index={index}
                             title={note.title}
                             content={note.content}
                             onDeleteNote={deleteNote}

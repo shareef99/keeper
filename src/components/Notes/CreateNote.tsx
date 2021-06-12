@@ -4,7 +4,6 @@ import { NoteFormType, NoteType } from "../../interface";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Zoom from "@material-ui/core/Zoom";
-import { db } from "../../firebase/config";
 import { useAuth } from "../../context/AuthContext";
 
 interface Props {
@@ -29,24 +28,13 @@ const CreateNote = ({ onAddNote }: Props) => {
         values: NoteFormType,
         actions: FormikHelpers<NoteFormType>
     ) => {
-        let { title, content } = values;
+        let { content } = values;
 
         if (!content || content === "") {
             return;
         }
 
-        const id = title + Math.floor(Math.random() * 1000000);
-
-        if (title === "") {
-            title = "untitled";
-        }
-
-        await db
-            .collection("users")
-            .doc(user?.uid)
-            .collection("notes")
-            .doc(id)
-            .set({ title, content, id });
+        onAddNote(values);
 
         console.log(values);
 
