@@ -16,7 +16,7 @@ export interface UserType {
     isAnonymous?: boolean;
 }
 
-export interface LoginFormValues {
-    email: string;
-    password: string;
+export interface NoteFormType {
+    title: string;
+    content: string;
 }
