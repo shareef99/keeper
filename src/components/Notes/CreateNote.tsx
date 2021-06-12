@@ -8,9 +8,10 @@ import { useAuth } from "../../context/AuthContext";
 
 interface Props {
     onAddNote: (note: NoteType) => void;
+    isExpanded: boolean;
 }
 
-const CreateNote = ({ onAddNote }: Props) => {
+const CreateNote = ({ onAddNote, isExpanded }: Props) => {
     // Constants
     const initialValues: NoteFormType = {
         title: "",
@@ -21,7 +22,7 @@ const CreateNote = ({ onAddNote }: Props) => {
     const { user } = useAuth();
 
     // States
-    const [isExpanded, setIsExpanded] = useState<boolean>(false);
+    // const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     // Handlers
     const submitNote = async (
@@ -39,34 +40,34 @@ const CreateNote = ({ onAddNote }: Props) => {
         console.log(values);
 
         actions.setSubmitting(false);
+        actions.resetForm();
     };
 
     return (
         <Formik initialValues={initialValues} onSubmit={submitNote}>
             <Form
-                className="create-note relative bg-gray-200 container sm:max-w-lg p-4 mx-auto mt-8 mb-5
-                    rounded-lg shadow-2xl"
+                className={`relative bg-gray-200 container sm:max-w-lg p-4 mx-auto mt-8 mb-5
+                    rounded-lg shadow-2xl`}
             >
                 {isExpanded && (
                     <Field
                         as="textarea"
                         name="title"
                         id="title"
-                        row="1"
                         placeholder="Title"
                         className="w-full border-none p-1 outline-none resize-none text-lg 
-                    bg-gray-200"
+                            bg-gray-200 form"
                     />
                 )}
                 <Field
                     as="textarea"
                     name="content"
+                    id="content"
                     placeholder="Take a note..."
                     rows={isExpanded ? 3 : 1}
-                    onClick={() => setIsExpanded(true)}
-                    className="w-full border-none p-1 outline-none resize-none text-lg bg-gray-200"
+                    className="form w-full border-none p-1 outline-none resize-none text-lg bg-gray-200"
                 />
-                <Zoom in={isExpanded} style={{ transitionDelay: "500ms" }}>
+                <Zoom in={isExpanded}>
                     <Fab
                         type="submit"
                         style={{
@@ -82,6 +83,7 @@ const CreateNote = ({ onAddNote }: Props) => {
                             cursor: "pointer",
                             outline: "none",
                         }}
+                        className="form"
                     >
                         <AddIcon />
                     </Fab>

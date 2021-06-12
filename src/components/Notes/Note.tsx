@@ -12,7 +12,7 @@ interface Props {
 const Note = ({ id, index, title, content, onDeleteNote }: Props) => {
     return (
         <Zoom in={true} style={{ transitionDelay: `${300 * index}ms` }}>
-            <li className="p-3 w-60 m-4 rounded-lg bg-gray-300 float-left">
+            <li className="p-3 w-60 m-4 rounded-lg bg-gray-300 float-left shadow-md">
                 <h1 className="mb-4 text-xl font-medium">{title}</h1>
                 <p
                     className="mb-3 whitespace-pre-wrap text-lg font-light"

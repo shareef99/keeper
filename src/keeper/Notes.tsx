@@ -14,6 +14,7 @@ const Notes = (props: Props) => {
 
     // State
     const [notes, setNotes] = useState<Array<NoteType>>([]);
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     db.collection("users")
         .doc(user?.uid)
@@ -55,8 +56,15 @@ const Notes = (props: Props) => {
 
     return (
         <section>
-            <div>
-                <CreateNote onAddNote={addNote} />
+            <div
+                onClick={(e: any) => {
+                    if (e.target.id === "title" || e.target.id === "content")
+                        return setIsExpanded(true);
+
+                    setIsExpanded(false);
+                }}
+            >
+                <CreateNote onAddNote={addNote} isExpanded={isExpanded} />
                 <ul className="flex justify-center flex-wrap items-start">
                     {notes.map((note, index) => (
                         <Note
