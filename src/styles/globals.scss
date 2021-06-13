@@ -42,6 +42,10 @@ a:focus {
     outline: none;
 }
 
+span {
+    display: inline-block;
+}
+
 .typed-cursor {
     background-image: linear-gradient(
         to bottom,
@@ -50,6 +54,20 @@ a:focus {
         var(--yellow-400)
     );
     padding: 1rem 0.5rem;
+}
+
+.editableTitle:empty::before {
+    content: attr(data-placeholder);
+    font-size: 1.25rem;
+    opacity: 0.5;
+    cursor: text;
+}
+
+.editableContent:empty::before {
+    content: attr(data-placeholder);
+    font-size: 1.125rem;
+    opacity: 0.5;
+    cursor: text;
 }
 
 header {

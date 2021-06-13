@@ -63,7 +63,6 @@ const Notes = (props: Props) => {
                 onClick={(e: any) => {
                     if (e.target.id === "title" || e.target.id === "content")
                         return setIsExpanded(true);
-
                     setIsExpanded(false);
                 }}
             >

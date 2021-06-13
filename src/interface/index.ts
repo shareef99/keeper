@@ -16,8 +16,3 @@ export interface UserType {
     phoneNumber?: number;
     isAnonymous?: boolean;
 }
-
-export interface NoteFormType {
-    title: string;
-    content: string;
-}
