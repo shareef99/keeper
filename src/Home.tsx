@@ -33,15 +33,9 @@ const Home = (props: Props) => {
     }, []);
 
     return (
-        <section
-            className="container grid md:grid-cols-2 md:place-items-center"
-            style={{ height: "calc(100vh - 5rem)" }}
-        >
+        <section className="container grid md:grid-cols-2 md:place-items-center fullHeight">
             <div className="place-self-center w-full">
-                <h1
-                    className="text-[2rem] xs:text-4xl sm:text-5xl lg:text-7xl xl:text-8xl w-full 
-                        text-center "
-                >
+                <h1 className="text-[3rem] lg:text-7xl xl:text-8xl w-full text-center">
                     <span className="inline-block md:mb-4">Keep your</span>
                     <div className="h-16">
                         <span
@@ -50,7 +44,9 @@ const Home = (props: Props) => {
                                 p-2 underline inline-block"
                         ></span>
                     </div>
-                    <span className="inline-block md:mt-12">in keeper</span>
+                    <span className="inline-block mt-4 lg:mt-12">
+                        in keeper
+                    </span>
                 </h1>
             </div>
             <div className="self-start place-self-center md:self-center">
@@ -66,9 +62,8 @@ const Home = (props: Props) => {
                     </div>
                 ) : (
                     <div
-                        className="border-4 border-gray-400 rowCenter space-x-2 px-4 py-2 rounded-md
-                            hover:bg-gray-400 cursor-pointer hover:text-gray-800 
-                            "
+                        className="rowCenter space-x-2 px-6 py-4 rounded-md bg-gray-400 cursor-pointer 
+                            hover:text-gray-800"
                         onClick={login}
                     >
                         <FcGoogle size="2rem" />

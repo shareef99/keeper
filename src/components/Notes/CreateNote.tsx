@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Formik, Form, Field, FormikHelpers } from "formik";
 import { NoteFormType, NoteType } from "../../interface";
-import AddIcon from "@material-ui/icons/Add";
-import Fab from "@material-ui/core/Fab";
 import Zoom from "@material-ui/core/Zoom";
-import { useEffect } from "react";
+import { BiPlus } from "react-icons/bi";
+import { Fab } from "@material-ui/core";
 
 interface Props {
     onAddNote: (note: NoteType) => void;
@@ -19,8 +18,10 @@ const CreateNote = ({ onAddNote, isExpanded }: Props) => {
     };
 
     // States
+    const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
-    const [rows, setRows] = useState<number>(3);
+    const [titleRows, setTitleRows] = useState<number>(1);
+    const [contentRows, setContentRows] = useState<number>(2);
 
     // Handlers
     const submitNote = async (
@@ -35,7 +36,8 @@ const CreateNote = ({ onAddNote, isExpanded }: Props) => {
 
         onAddNote(values);
         // Resetting rows to default(3) values after submitting form
-        setRows(3);
+        setContentRows(2);
+        setTitleRows(1);
         console.log(values);
 
         actions.setSubmitting(false);
@@ -45,20 +47,32 @@ const CreateNote = ({ onAddNote, isExpanded }: Props) => {
     const handleContentHeight = (e: any) => {
         const lastIndex = content.length - 1;
 
-        setTimeout(() => {
-            if (e.code === "Enter") {
-                setRows((prevRows) => prevRows + 1);
-            }
+        if (e.code === "Enter") {
+            setContentRows((prevRows) => prevRows + 1);
+        }
 
-            if (e.code === "Backspace" && content.charAt(lastIndex) === "\n") {
-                setRows((prevRows) => prevRows - 1);
-            }
-        }, 0);
+        if (e.code === "Backspace" && content.charAt(lastIndex) === "\n") {
+            setContentRows((prevRows) => prevRows - 1);
+        }
+    };
+
+    const handleTitleHeight = (e: any) => {
+        const lastIndex = title.length - 1;
+
+        if (e.code === "Enter") {
+            setTitleRows((prevRows) => prevRows + 1);
+        }
+
+        if (e.code === "Backspace" && title.charAt(lastIndex) === "\n") {
+            setTitleRows((prevRows) => prevRows - 1);
+        }
     };
 
     return (
         <Formik initialValues={initialValues} onSubmit={submitNote}>
             {({ values }) => {
+                setContent(values.content);
+                setTitle(values.title);
                 return (
                     <Form
                         className={`relative bg-gray-200 container sm:max-w-lg p-4 mx-auto mt-8 mb-5
@@ -69,19 +83,20 @@ const CreateNote = ({ onAddNote, isExpanded }: Props) => {
                                 as="textarea"
                                 name="title"
                                 id="title"
+                                rows={titleRows}
+                                onKeyDown={handleTitleHeight}
                                 placeholder="Title"
                                 className="w-full border-none p-1 outline-none resize-none text-lg 
                             bg-gray-200 form"
                             />
                         )}
-                        {setContent(values.content)}
                         <Field
                             as="textarea"
                             name="content"
                             id="content"
                             onKeyDown={handleContentHeight}
                             placeholder="Take a note..."
-                            rows={isExpanded ? rows : 1}
+                            rows={isExpanded ? contentRows : 1}
                             className="w-full max-h-full border-none p-1 outline-none resize-none text-lg bg-gray-200"
                         />
                         <Zoom in={isExpanded}>
@@ -100,9 +115,9 @@ const CreateNote = ({ onAddNote, isExpanded }: Props) => {
                                     cursor: "pointer",
                                     outline: "none",
                                 }}
-                                className="form"
+                                title="Add notes"
                             >
-                                <AddIcon />
+                                <BiPlus size="1.45rem" />
                             </Fab>
                         </Zoom>
                     </Form>

@@ -12,17 +12,18 @@ interface Props {
 const Note = ({ id, index, title, content, onDeleteNote }: Props) => {
     return (
         <Zoom in={true} style={{ transitionDelay: `${300 * index}ms` }}>
-            <li className="p-3 w-60 m-4 rounded-lg bg-gray-300 float-left shadow-md">
+            <li className="p-3 w-60 m-4 rounded-lg bg-gray-300 shadow-lg">
                 <h1 className="mb-4 text-xl font-medium">{title}</h1>
                 <p
-                    className="mb-3 whitespace-pre-wrap text-lg font-light"
+                    className="mb-3 whitespace-pre-wrap text-lg"
                     style={{ wordWrap: "break-word" }}
                 >
                     {content}
                 </p>
                 <button
                     onClick={() => onDeleteNote(id)}
-                    className="relative float-right cursor-pointer"
+                    className="relative float-right cursor-pointer hover:text-red-400"
+                    title="Delete note"
                 >
                     <MdDelete size="1.75rem" color="#555" />
                 </button>
