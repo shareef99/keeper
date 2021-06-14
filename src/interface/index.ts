@@ -4,6 +4,12 @@ export interface NoteType {
     content: string;
 }
 
+export interface OptionalNote {
+    id?: string;
+    title?: string;
+    content?: string;
+}
+
 export interface UserType {
     uid: string;
     name: string;

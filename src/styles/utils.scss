@@ -12,7 +12,8 @@
     flex-direction: row;
 }
 
-.colCenter {
+.colCenter,
+.colStart {
     flex-direction: column;
 }
 
@@ -22,6 +23,11 @@
 
 .flexBetween {
     justify-content: space-between;
+}
+
+.colStart {
+    display: flex;
+    justify-content: flex-start;
 }
 
 .fullHeight {

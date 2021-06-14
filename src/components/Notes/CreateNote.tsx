@@ -1,8 +1,8 @@
 import { FormEvent } from "react";
 import { NoteType } from "../../interface";
 import Zoom from "@material-ui/core/Zoom";
-import { BiPlus } from "react-icons/bi";
 import { useRef } from "react";
+import { PlusButton } from "../atoms/Buttons";
 
 interface Props {
     onAddNote: (note: NoteType) => void;
@@ -17,21 +17,11 @@ const CreateNote = ({ onAddNote, isExpanded }: Props) => {
     // Handlers
     const submitNote = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        let title = titleRef?.current?.innerText;
-        let content = contentRef?.current?.innerText;
 
-        if ((!content || content === "") && (!title || title === "")) return;
-
-        if (!title || title === "") {
-            title = "Untitled";
-        }
-
-        if (!content || content === "") {
-            content = "Empty note...";
-        }
+        let title = titleRef?.current?.innerText.trim() || "Untitled";
+        let content = contentRef?.current?.innerText.trim() || "Empty note...";
 
         onAddNote({ title, content });
-        console.log({ title, content });
     };
 
     return (
@@ -55,15 +45,13 @@ const CreateNote = ({ onAddNote, isExpanded }: Props) => {
                 className="w-full p-1 outline-none text-lg bg-gray-200 editableContent"
             />
             <Zoom in={true}>
-                <button
-                    type="submit"
+                <PlusButton
                     className="flexCenter absolute right-[18px] -bottom-[18px] border-none rounded-full 
                         w-9 h-9 outline-none text-white bg-yellow-400 hover:bg-yellow-500
                         transitionIn"
-                    title="Add notes"
-                >
-                    <BiPlus size="1.45rem" />
-                </button>
+                    iconSize="1.45rem"
+                    type="button"
+                />
             </Zoom>
         </form>
     );

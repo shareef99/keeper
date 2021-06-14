@@ -1,10 +1,11 @@
 import { useAuth } from "../context/AuthContext";
 import CreateNote from "../components/Notes/CreateNote";
-import { NoteType } from "../interface";
+import { NoteType, OptionalNote } from "../interface";
 import { useEffect, useState } from "react";
 import Note from "../components/Notes/Note";
 import { db } from "../firebase/config";
 import Zoom from "@material-ui/core/Zoom";
+import { getNotesRef } from "../helpers/notes";
 
 interface Props {}
 
@@ -16,6 +17,7 @@ const Notes = (props: Props) => {
     const [notes, setNotes] = useState<Array<NoteType>>([]);
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
+    // Effects
     useEffect(() => {
         db.collection("users")
             .doc(user?.uid)
@@ -31,6 +33,7 @@ const Notes = (props: Props) => {
             );
     }, [user?.uid]);
 
+    // Handlers / Functions
     const addNote = async (note: NoteType) => {
         let { title, content } = note;
 
@@ -49,12 +52,18 @@ const Notes = (props: Props) => {
     };
 
     const deleteNote = async (id: string) => {
-        await db
-            .collection("users")
-            .doc(user?.uid)
-            .collection("notes")
+        await getNotesRef(user?.uid!).doc(id).delete();
+    };
+
+    const updateNote = async (note: OptionalNote, id: string) => {
+        const notesRef = getNotesRef(user?.uid!);
+        const { title, content } = note;
+
+        const newTitle = title?.trim() || "Untitled";
+        const newContent = content?.trim() || "Empty note...";
+        await notesRef
             .doc(id)
-            .delete();
+            .update({ id, title: newTitle, content: newContent });
     };
 
     return (
@@ -84,6 +93,7 @@ const Notes = (props: Props) => {
                             title={note.title}
                             content={note.content}
                             onDeleteNote={deleteNote}
+                            onUpdateNote={updateNote}
                         />
                     ))}
                 </ul>
