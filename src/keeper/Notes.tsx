@@ -1,11 +1,11 @@
 import { useAuth } from "../context/AuthContext";
 import CreateNote from "../components/Notes/CreateNote";
-import { NoteType, OptionalNote } from "../interface";
+import { NoteType, OptionalNote, TitleNContent } from "../interface";
 import { useEffect, useState } from "react";
 import Note from "../components/Notes/Note";
 import { db } from "../firebase/config";
 import Zoom from "@material-ui/core/Zoom";
-import { getNotesRef } from "../helpers/notes";
+import { getCurrentTime, getNotesRef } from "../helpers/notes";
 
 interface Props {}
 
@@ -28,17 +28,19 @@ const Notes = (props: Props) => {
                         id: doc.data().id,
                         title: doc.data().title,
                         content: doc.data().content,
+                        createdAt: doc.data().createdAt,
+                        lastEditedAt: doc.data().lastEditedAt || "Original",
                     }))
                 )
             );
     }, [user?.uid]);
 
     // Handlers / Functions
-    const addNote = async (note: NoteType) => {
+    const addNote = async (note: TitleNContent) => {
         let { title, content } = note;
 
         const id = title + Math.floor(Math.random() * 10000000);
-
+        const createdAt = getCurrentTime();
         if (title === "") {
             title = "untitled";
         }
@@ -48,7 +50,7 @@ const Notes = (props: Props) => {
             .doc(user?.uid)
             .collection("notes")
             .doc(id)
-            .set({ title, content, id });
+            .set({ id, title, content, createdAt });
     };
 
     const deleteNote = async (id: string) => {
@@ -61,9 +63,11 @@ const Notes = (props: Props) => {
 
         const newTitle = title?.trim() || "Untitled";
         const newContent = content?.trim() || "Empty note...";
+        const lastEditedAt = getCurrentTime();
+
         await notesRef
             .doc(id)
-            .update({ id, title: newTitle, content: newContent });
+            .update({ id, title: newTitle, content: newContent, lastEditedAt });
     };
 
     return (

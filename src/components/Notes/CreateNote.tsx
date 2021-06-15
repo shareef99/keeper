@@ -1,11 +1,11 @@
 import { FormEvent } from "react";
-import { NoteType } from "../../interface";
+import { TitleNContent } from "../../interface";
 import Zoom from "@material-ui/core/Zoom";
 import { useRef } from "react";
 import { PlusButton } from "../atoms/Buttons";
 
 interface Props {
-    onAddNote: (note: NoteType) => void;
+    onAddNote: (note: TitleNContent) => void;
     isExpanded: boolean;
 }
 
@@ -22,6 +22,18 @@ const CreateNote = ({ onAddNote, isExpanded }: Props) => {
         let content = contentRef?.current?.innerText.trim() || "Empty note...";
 
         onAddNote({ title, content });
+
+        if (titleRef) {
+            if (titleRef.current) {
+                titleRef.current.innerText = "";
+            }
+        }
+
+        if (contentRef) {
+            if (contentRef.current) {
+                contentRef.current.innerText = "";
+            }
+        }
     };
 
     return (
@@ -50,7 +62,7 @@ const CreateNote = ({ onAddNote, isExpanded }: Props) => {
                         w-9 h-9 outline-none text-white bg-yellow-400 hover:bg-yellow-500
                         transitionIn"
                     iconSize="1.45rem"
-                    type="button"
+                    type="submit"
                 />
             </Zoom>
         </form>
