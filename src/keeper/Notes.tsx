@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Note from "../components/Notes/Note";
 import { db } from "../firebase/config";
 import Zoom from "@material-ui/core/Zoom";
-import { getCurrentTime, getNotesRef } from "../helpers/notes";
+import { getCurrentTime, getNoteRef } from "../helpers/notes";
 
 interface Props {}
 
@@ -45,40 +45,41 @@ const Notes = (props: Props) => {
             title = "untitled";
         }
 
-        await db
-            .collection("users")
-            .doc(user?.uid)
-            .collection("notes")
-            .doc(id)
-            .set({ id, title, content, createdAt });
+        const noteRef = getNoteRef(user?.uid!, id);
+        await noteRef.set({ id, title, content, createdAt });
     };
 
     const deleteNote = async (id: string) => {
-        await getNotesRef(user?.uid!).doc(id).delete();
+        await getNoteRef(user?.uid!, id).delete();
     };
 
     const updateNote = async (note: OptionalNote, id: string) => {
-        const notesRef = getNotesRef(user?.uid!);
+        const noteRef = getNoteRef(user?.uid!, id);
         const { title, content } = note;
 
         const newTitle = title?.trim() || "Untitled";
         const newContent = content?.trim() || "Empty note...";
         const lastEditedAt = getCurrentTime();
 
-        await notesRef
-            .doc(id)
-            .update({ id, title: newTitle, content: newContent, lastEditedAt });
+        const updatedNote = {
+            id,
+            title: newTitle,
+            content: newContent,
+            lastEditedAt,
+        };
+
+        await noteRef.update(updatedNote);
+    };
+
+    const handleExpanded = (e: any) => {
+        if (e.target.id === "title" || e.target.id === "content")
+            return setIsExpanded(true);
+        setIsExpanded(false);
     };
 
     return (
         <section>
-            <div
-                onClick={(e: any) => {
-                    if (e.target.id === "title" || e.target.id === "content")
-                        return setIsExpanded(true);
-                    setIsExpanded(false);
-                }}
-            >
+            <div onClick={handleExpanded}>
                 <CreateNote onAddNote={addNote} isExpanded={isExpanded} />
                 <ul className="flex justify-center flex-wrap items-start">
                     {notes.length < 1 && (
