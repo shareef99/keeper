@@ -2,8 +2,8 @@ import { FormEvent, useRef, useState } from "react";
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNote } from "../../context/NoteContext";
-import { getNoteRef } from "../../helpers/notes";
-import { OptionalNote } from "../../interface";
+import { getNoteRef } from "../../lib/helpers/notes";
+import { OptionalNote } from "../../lib/interface";
 import Options from "./Options";
 
 interface Props {

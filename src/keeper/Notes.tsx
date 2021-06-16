@@ -2,7 +2,7 @@ import { useAuth } from "../context/AuthContext";
 import CreateNote from "../components/Notes/CreateNote";
 import Note from "../components/Notes/Note";
 import Zoom from "@material-ui/core/Zoom";
-import { useFetchNotes } from "../hooks/notes";
+import { useFetchNotes } from "../lib/hooks/notes";
 
 interface Props {}
 

@@ -3,7 +3,7 @@ import Zoom from "@material-ui/core/Zoom";
 import { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import UpdateNote from "./UpdateNote";
-import { OptionalNote } from "../../interface";
+import { OptionalNote } from "../../lib/interface";
 import { useCallback } from "react";
 import { useNote } from "../../context/NoteContext";
 

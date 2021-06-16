@@ -1,4 +1,4 @@
-import { db, firebase } from "../firebase/config";
+import { db, firebase } from "../lib/firebase/config";
 import {
     createContext,
     ReactNode,
@@ -6,8 +6,8 @@ import {
     useEffect,
     useState,
 } from "react";
-import { UserType } from "../interface";
-import { convertDateToINS } from "../helpers/context";
+import { UserType } from "../lib/interface";
+import { convertDateToINS } from "../lib/helpers/context";
 import { useHistory } from "react-router-dom";
 // import firebase from "firebase";
 

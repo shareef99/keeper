@@ -1,5 +1,4 @@
 import { FormEvent } from "react";
-import { TitleNContent } from "../../interface";
 import Zoom from "@material-ui/core/Zoom";
 import { useRef } from "react";
 import { PlusButton } from "../atoms/Buttons";
@@ -7,7 +6,7 @@ import { useNote } from "../../context/NoteContext";
 
 interface Props {}
 
-const CreateNote = ({}: Props) => {
+const CreateNote = (props: Props) => {
     // Context
     const { addNote } = useNote();
 

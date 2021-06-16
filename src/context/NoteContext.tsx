@@ -1,12 +1,6 @@
-import {
-    createContext,
-    ReactNode,
-    useContext,
-    useEffect,
-    useState,
-} from "react";
-import { getCurrentTime, getNoteRef } from "../helpers/notes";
-import { OptionalNote, TitleNContent } from "../interface";
+import { createContext, ReactNode, useContext } from "react";
+import { getCurrentTime, getNoteRef } from "../lib/helpers/notes";
+import { OptionalNote, TitleNContent } from "../lib/interface";
 import { useAuth } from "./AuthContext";
 
 interface noteContextType {
