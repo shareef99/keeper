@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { getNoteRef } from "../../helpers/notes";
 import { OptionalNote } from "../../interface";
+import Options from "./Options";
 
 interface Props {
     id: string;
@@ -88,7 +89,7 @@ const UpdateNote = (props: Props) => {
                     contentEditable={true}
                     className="w-full p-1 outline-none text-xl font-medium"
                     ref={titleRef}
-                ></div>
+                />
                 <div
                     contentEditable={true}
                     className="w-full p-1 outline-none text-lg"
@@ -106,13 +107,14 @@ const UpdateNote = (props: Props) => {
                         </div>
                     )}
                     <div className="flex items-center space-x-4">
-                        <div className="mr-auto">
+                        <div className="mr-auto rowCenter">
                             <span className="">
                                 created{" "}
                                 <time className="font-medium text-black">
                                     {createdAt}
                                 </time>
                             </span>
+                            <Options />
                         </div>
                         <button
                             type="submit"
