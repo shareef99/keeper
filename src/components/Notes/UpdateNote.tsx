@@ -1,6 +1,7 @@
 import { FormEvent, useRef, useState } from "react";
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useNote } from "../../context/NoteContext";
 import { getNoteRef } from "../../helpers/notes";
 import { OptionalNote } from "../../interface";
 import Options from "./Options";
@@ -114,7 +115,7 @@ const UpdateNote = (props: Props) => {
                                     {createdAt}
                                 </time>
                             </span>
-                            <Options />
+                            <Options id={id} />
                         </div>
                         <button
                             type="submit"

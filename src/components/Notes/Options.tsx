@@ -3,10 +3,16 @@ import { MdMoreVert } from "react-icons/md";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fade from "@material-ui/core/Fade";
+import { useNote } from "../../context/NoteContext";
 
-interface Props {}
+interface Props {
+    id: string;
+}
 
-const Options = (props: Props) => {
+const Options = ({ id }: Props) => {
+    // Context
+    const { deleteNote } = useNote();
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     // Handlers / Functions
@@ -36,7 +42,14 @@ const Options = (props: Props) => {
                     horizontal: "right",
                 }}
             >
-                <MenuItem onClick={closeMenu}>Delete note</MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        deleteNote(id);
+                        closeMenu();
+                    }}
+                >
+                    Delete note
+                </MenuItem>
                 <MenuItem onClick={closeMenu}>Add label</MenuItem>
                 <MenuItem onClick={closeMenu}>Make a copy</MenuItem>
                 <MenuItem onClick={closeMenu}>Add to secret</MenuItem>
