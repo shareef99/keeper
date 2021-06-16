@@ -5,18 +5,22 @@ import Dialog from "@material-ui/core/Dialog";
 import UpdateNote from "./UpdateNote";
 import { OptionalNote } from "../../interface";
 import { useCallback } from "react";
+import { useNote } from "../../context/NoteContext";
 
 interface Props {
     id: string;
     index: number;
     title: string;
     content: string;
-    onDeleteNote: (id: string) => void;
     onUpdateNote: (note: OptionalNote, id: string) => void;
 }
 
 const Note = (props: Props) => {
-    const { id, index, title, content, onDeleteNote, onUpdateNote } = props;
+    const { id, index, title, content, onUpdateNote } = props;
+
+    // Context
+    const { deleteNote } = useNote();
+
     // States
     const [selectedNote, setSelectedNote] = useState<string>("none");
     const [note, setNote] = useState<OptionalNote | null>(null);
@@ -50,7 +54,7 @@ const Note = (props: Props) => {
                         {content}
                     </p>
                     <button
-                        onClick={() => onDeleteNote(id)}
+                        onClick={() => deleteNote(id)}
                         className="relative float-right cursor-pointer hover:text-red-400"
                         title="Delete note"
                     >

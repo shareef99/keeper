@@ -1,6 +1,6 @@
 import { useAuth } from "../context/AuthContext";
 import CreateNote from "../components/Notes/CreateNote";
-import { NoteType, OptionalNote, TitleNContent } from "../interface";
+import { NoteType, OptionalNote } from "../interface";
 import { useEffect, useState } from "react";
 import Note from "../components/Notes/Note";
 import { db } from "../firebase/config";
@@ -15,7 +15,6 @@ const Notes = (props: Props) => {
 
     // State
     const [notes, setNotes] = useState<Array<NoteType>>([]);
-    const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     // Effects
     useEffect(() => {
@@ -36,23 +35,6 @@ const Notes = (props: Props) => {
     }, [user?.uid]);
 
     // Handlers / Functions
-    const addNote = async (note: TitleNContent) => {
-        let { title, content } = note;
-
-        const id = title + Math.floor(Math.random() * 10000000);
-        const createdAt = getCurrentTime();
-        if (title === "") {
-            title = "untitled";
-        }
-
-        const noteRef = getNoteRef(user?.uid!, id);
-        await noteRef.set({ id, title, content, createdAt });
-    };
-
-    const deleteNote = async (id: string) => {
-        await getNoteRef(user?.uid!, id).delete();
-    };
-
     const updateNote = async (note: OptionalNote, id: string) => {
         const noteRef = getNoteRef(user?.uid!, id);
         const { title, content } = note;
@@ -73,16 +55,10 @@ const Notes = (props: Props) => {
         await noteRef.update(updatedNote);
     };
 
-    const handleExpanded = (e: any) => {
-        if (e.target.id === "title" || e.target.id === "content")
-            return setIsExpanded(true);
-        setIsExpanded(false);
-    };
-
     return (
         <section>
-            <div onClick={handleExpanded}>
-                <CreateNote onAddNote={addNote} isExpanded={isExpanded} />
+            <div>
+                <CreateNote />
                 <ul className="flex justify-center flex-wrap items-start">
                     {notes.length < 1 && (
                         <Zoom in={true}>
@@ -99,7 +75,6 @@ const Notes = (props: Props) => {
                             index={index}
                             title={note.title}
                             content={note.content}
-                            onDeleteNote={deleteNote}
                             onUpdateNote={updateNote}
                         />
                     ))}

@@ -5,15 +5,18 @@ import {
     useEffect,
     useState,
 } from "react";
-import { getNoteRef } from "../helpers/notes";
+import { getCurrentTime, getNoteRef } from "../helpers/notes";
+import { TitleNContent } from "../interface";
 import { useAuth } from "./AuthContext";
 
 interface noteContextType {
     deleteNote: (id: string) => Promise<void>;
+    addNote: (note: TitleNContent) => Promise<void>;
 }
 
 const noteContextDefaultValues: noteContextType = {
     deleteNote: (id: string) => new Promise((resolve) => resolve()),
+    addNote: (note: TitleNContent) => new Promise((resolve) => resolve()),
 };
 
 const NoteContext = createContext<noteContextType>(noteContextDefaultValues);
@@ -33,8 +36,22 @@ export function NoteProvider({ children }: Props) {
         await getNoteRef(user?.uid!, id).delete();
     };
 
+    const addNote = async (note: TitleNContent) => {
+        let { title, content } = note;
+
+        const id = title + Math.floor(Math.random() * 10000000);
+        const createdAt = getCurrentTime();
+        if (title === "") {
+            title = "untitled";
+        }
+
+        const noteRef = getNoteRef(user?.uid!, id);
+        await noteRef.set({ id, title, content, createdAt });
+    };
+
     const value = {
         deleteNote,
+        addNote,
     };
 
     return (

@@ -3,25 +3,26 @@ import { TitleNContent } from "../../interface";
 import Zoom from "@material-ui/core/Zoom";
 import { useRef } from "react";
 import { PlusButton } from "../atoms/Buttons";
+import { useNote } from "../../context/NoteContext";
 
-interface Props {
-    onAddNote: (note: TitleNContent) => void;
-    isExpanded: boolean;
-}
+interface Props {}
 
-const CreateNote = ({ onAddNote, isExpanded }: Props) => {
+const CreateNote = ({}: Props) => {
+    // Context
+    const { addNote } = useNote();
+
     // Refs
     const contentRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLDivElement>(null);
 
     // Handlers
-    const submitNote = (e: FormEvent<HTMLFormElement>) => {
+    const submitNote = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         let title = titleRef?.current?.innerText.trim() || "Untitled";
         let content = contentRef?.current?.innerText.trim() || "Empty note...";
 
-        onAddNote({ title, content });
+        await addNote({ title, content });
 
         if (titleRef) {
             if (titleRef.current) {
