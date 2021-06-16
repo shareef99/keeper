@@ -95,15 +95,25 @@ const UpdateNote = (props: Props) => {
                     className="w-full p-1 outline-none text-lg"
                     ref={contentRef}
                 />
-                <div className="mt-8 py-3 flex justify-end items-center space-x-4">
-                    <div>
-                        <span>created at: {createdAt}</span>
-                        <span>last edited at: {lastEditedAt}</span>
+                <div className="mt-8 py-3 flex flex-col space-y-2">
+                    {lastEditedAt && (
+                        <div className="self-end">
+                            <span>Edited {lastEditedAt}</span>
+                        </div>
+                    )}
+                    <div className="flex items-center space-x-4">
+                        <div className="mr-auto">
+                            <span className="">created at: {createdAt}</span>
+                        </div>
+                        <button
+                            type="submit"
+                            className="cursor-pointer font-medium text-xl"
+                        >
+                            Close
+                        </button>
                     </div>
-                    <span>Close</span>
                 </div>
             </form>
-            <div></div>
         </section>
     );
 };

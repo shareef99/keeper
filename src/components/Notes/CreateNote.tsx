@@ -60,7 +60,7 @@ const CreateNote = ({ onAddNote, isExpanded }: Props) => {
                 <PlusButton
                     className="flexCenter absolute right-[18px] -bottom-[18px] border-none rounded-full 
                         w-9 h-9 outline-none text-white bg-yellow-400 hover:bg-yellow-500
-                        transitionIn"
+                        focus:bg-yellow-500 transitionIn"
                     iconSize="1.45rem"
                     type="submit"
                 />

@@ -9,5 +9,9 @@ export const getNoteRef = (uid: string, noteId: string) => {
 };
 
 export const getCurrentTime = () => {
-    return `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
+    return `${new Date().toLocaleDateString(undefined, {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+    })}`;
 };
