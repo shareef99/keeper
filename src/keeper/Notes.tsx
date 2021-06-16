@@ -1,11 +1,10 @@
 import { useAuth } from "../context/AuthContext";
 import CreateNote from "../components/Notes/CreateNote";
-import { NoteType, OptionalNote } from "../interface";
+import { NoteType } from "../interface";
 import { useEffect, useState } from "react";
 import Note from "../components/Notes/Note";
 import { db } from "../firebase/config";
 import Zoom from "@material-ui/core/Zoom";
-import { getCurrentTime, getNoteRef } from "../helpers/notes";
 
 interface Props {}
 
@@ -34,27 +33,6 @@ const Notes = (props: Props) => {
             );
     }, [user?.uid]);
 
-    // Handlers / Functions
-    const updateNote = async (note: OptionalNote, id: string) => {
-        const noteRef = getNoteRef(user?.uid!, id);
-        const { title, content } = note;
-        const prevTitle = (await noteRef.get()).data()?.title;
-        const prevContent = (await noteRef.get()).data()?.content;
-
-        const newTitle = title?.trim() || prevTitle || "Untitled";
-        const newContent = content?.trim() || prevContent || "Empty note...";
-        const lastEditedAt = getCurrentTime();
-
-        const updatedNote = {
-            id,
-            title: newTitle,
-            content: newContent,
-            lastEditedAt,
-        };
-
-        await noteRef.update(updatedNote);
-    };
-
     return (
         <section>
             <div>
@@ -75,7 +53,6 @@ const Notes = (props: Props) => {
                             index={index}
                             title={note.title}
                             content={note.content}
-                            onUpdateNote={updateNote}
                         />
                     ))}
                 </ul>

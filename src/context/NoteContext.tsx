@@ -6,17 +6,20 @@ import {
     useState,
 } from "react";
 import { getCurrentTime, getNoteRef } from "../helpers/notes";
-import { TitleNContent } from "../interface";
+import { OptionalNote, TitleNContent } from "../interface";
 import { useAuth } from "./AuthContext";
 
 interface noteContextType {
     deleteNote: (id: string) => Promise<void>;
     addNote: (note: TitleNContent) => Promise<void>;
+    updateNote: (note: OptionalNote, id: string) => Promise<void>;
 }
 
 const noteContextDefaultValues: noteContextType = {
-    deleteNote: (id: string) => new Promise((resolve) => resolve()),
     addNote: (note: TitleNContent) => new Promise((resolve) => resolve()),
+    updateNote: (note: OptionalNote, id: string) =>
+        new Promise((resolve) => resolve()),
+    deleteNote: (id: string) => new Promise((resolve) => resolve()),
 };
 
 const NoteContext = createContext<noteContextType>(noteContextDefaultValues);
@@ -49,9 +52,30 @@ export function NoteProvider({ children }: Props) {
         await noteRef.set({ id, title, content, createdAt });
     };
 
+    const updateNote = async (note: OptionalNote, id: string) => {
+        const noteRef = getNoteRef(user?.uid!, id);
+        const { title, content } = note;
+        const prevTitle = (await noteRef.get()).data()?.title;
+        const prevContent = (await noteRef.get()).data()?.content;
+
+        const newTitle = title?.trim() || prevTitle || "Untitled";
+        const newContent = content?.trim() || prevContent || "Empty note...";
+        const lastEditedAt = getCurrentTime();
+
+        const updatedNote = {
+            id,
+            title: newTitle,
+            content: newContent,
+            lastEditedAt,
+        };
+
+        await noteRef.update(updatedNote);
+    };
+
     const value = {
-        deleteNote,
         addNote,
+        updateNote,
+        deleteNote,
     };
 
     return (

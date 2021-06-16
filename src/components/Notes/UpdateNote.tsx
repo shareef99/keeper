@@ -10,19 +10,19 @@ interface Props {
     id: string;
     title: string;
     content: string;
-    onUpdateNote: (note: OptionalNote, id: string) => void;
     onSetNote: (note: OptionalNote) => void;
     onClose: () => void;
 }
 
 const UpdateNote = (props: Props) => {
-    const { id, title, content, onUpdateNote, onSetNote, onClose } = props;
+    const { id, title, content, onSetNote, onClose } = props;
     // Refs
     const titleRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
 
     // Content
     const { user } = useAuth();
+    const { updateNote } = useNote();
 
     // States
     const [createdAt, setCreatedAt] = useState<string>("");
@@ -70,12 +70,12 @@ const UpdateNote = (props: Props) => {
     }, [onSetNote]);
 
     // Handlers
-    const updateNote = (e: FormEvent<HTMLFormElement>) => {
+    const handleUpdateNote = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const updatedTitle = titleRef.current?.innerText || title || "Untitled";
         const updatedContent =
             contentRef.current?.innerText || content || "Empty note...";
-        onUpdateNote({ title: updatedTitle, content: updatedContent }, id);
+        await updateNote({ title: updatedTitle, content: updatedContent }, id);
         // Closing Dialog.
         onClose();
     };
@@ -83,7 +83,7 @@ const UpdateNote = (props: Props) => {
     return (
         <section>
             <form
-                onSubmit={updateNote}
+                onSubmit={handleUpdateNote}
                 className="p-4 bg-gray-200 min-w-[300px] xs:min-w-[400px] sm:min-w-[500px] rounded-lg"
             >
                 <div

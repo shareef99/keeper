@@ -12,24 +12,23 @@ interface Props {
     index: number;
     title: string;
     content: string;
-    onUpdateNote: (note: OptionalNote, id: string) => void;
 }
 
 const Note = (props: Props) => {
-    const { id, index, title, content, onUpdateNote } = props;
+    const { id, index, title, content } = props;
 
     // Context
-    const { deleteNote } = useNote();
+    const { deleteNote, updateNote } = useNote();
 
     // States
     const [selectedNote, setSelectedNote] = useState<string>("none");
     const [note, setNote] = useState<OptionalNote | null>(null);
 
     // Handlers
-    const handleClose = () => {
+    const handleClose = async () => {
         setSelectedNote("none");
         if (note) {
-            onUpdateNote(note, id);
+            await updateNote(note, id);
         }
     };
 
@@ -71,7 +70,6 @@ const Note = (props: Props) => {
                     id={id}
                     title={title}
                     content={content}
-                    onUpdateNote={onUpdateNote}
                     onSetNote={handleSetNote}
                     onClose={handleClose}
                 />
