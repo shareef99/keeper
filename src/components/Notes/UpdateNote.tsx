@@ -1,10 +1,8 @@
-import React, { FormEvent, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { db } from "../../firebase/config";
-import { getNoteRef, getNotesRef } from "../../helpers/notes";
+import { getNoteRef } from "../../helpers/notes";
 import { OptionalNote } from "../../interface";
-import { PlusButton } from "../atoms/Buttons";
 
 interface Props {
     id: string;
@@ -72,9 +70,10 @@ const UpdateNote = (props: Props) => {
     // Handlers
     const updateNote = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const title = titleRef.current?.innerText || "Untitled";
-        const content = contentRef.current?.innerText || "Empty note...";
-        onUpdateNote({ title, content }, id);
+        const updatedTitle = titleRef.current?.innerText || title || "Untitled";
+        const updatedContent =
+            contentRef.current?.innerText || content || "Empty note...";
+        onUpdateNote({ title: updatedTitle, content: updatedContent }, id);
         // Closing Dialog.
         onClose();
     };
@@ -98,12 +97,22 @@ const UpdateNote = (props: Props) => {
                 <div className="mt-8 py-3 flex flex-col space-y-2">
                     {lastEditedAt && (
                         <div className="self-end">
-                            <span>Edited {lastEditedAt}</span>
+                            <span>
+                                Edited{" "}
+                                <time className="font-medium text-black">
+                                    {lastEditedAt}
+                                </time>
+                            </span>
                         </div>
                     )}
                     <div className="flex items-center space-x-4">
                         <div className="mr-auto">
-                            <span className="">created at: {createdAt}</span>
+                            <span className="">
+                                created{" "}
+                                <time className="font-medium text-black">
+                                    {createdAt}
+                                </time>
+                            </span>
                         </div>
                         <button
                             type="submit"

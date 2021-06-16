@@ -56,9 +56,11 @@ const Notes = (props: Props) => {
     const updateNote = async (note: OptionalNote, id: string) => {
         const noteRef = getNoteRef(user?.uid!, id);
         const { title, content } = note;
+        const prevTitle = (await noteRef.get()).data()?.title;
+        const prevContent = (await noteRef.get()).data()?.content;
 
-        const newTitle = title?.trim() || "Untitled";
-        const newContent = content?.trim() || "Empty note...";
+        const newTitle = title?.trim() || prevTitle || "Untitled";
+        const newContent = content?.trim() || prevContent || "Empty note...";
         const lastEditedAt = getCurrentTime();
 
         const updatedNote = {
