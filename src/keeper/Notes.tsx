@@ -35,13 +35,16 @@ const Notes = (props: Props) => {
                 onClick={(e: any) => {
                     console.log(e.target);
 
-                    if (nonExpandableElements.includes(e.target.id))
-                        return setIsExpanded(true);
-                    setIsExpanded(false);
+                    if (e.target.id === "notes-list")
+                        return setIsExpanded(false);
+                    setIsExpanded(true);
                 }}
             >
                 <CreateNote isExpanded={isExpanded} />
-                <ul className="flex justify-center flex-wrap items-start">
+                <ul
+                    id="notes-list"
+                    className="flex justify-center flex-wrap items-start"
+                >
                     {notes.length < 1 && (
                         <Zoom in={true}>
                             <li className="font-medium text-2xl my-40 text-center px-2">

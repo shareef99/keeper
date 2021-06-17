@@ -1,8 +1,8 @@
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import { useRef } from "react";
 import { PlusButton } from "../atoms/Buttons";
 import { useNote } from "../../context/NoteContext";
-import Options from "./Options";
+import Options from "./components/Options";
 
 interface Props {
     isExpanded: boolean;

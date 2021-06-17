@@ -3,7 +3,8 @@ import { MdMoreVert } from "react-icons/md";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fade from "@material-ui/core/Fade";
-import { useNote } from "../../context/NoteContext";
+import { useNote } from "../../../context/NoteContext";
+import LabelMenu from "./LabelMenu";
 
 interface Props {
     id?: string;
@@ -13,23 +14,20 @@ const Options = ({ id }: Props) => {
     // Context
     const { deleteNote } = useNote();
 
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    // State
+    const [menuEl, setMenuEl] = useState<null | HTMLElement>(null);
 
     // Handlers / Functions
     const openMenu = (e: MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(e.currentTarget);
+        setMenuEl(e.currentTarget);
     };
 
     const closeMenu = () => {
-        setAnchorEl(null);
+        setMenuEl(null);
     };
 
     const deleteHandler = () => {
         deleteNote(id!);
-        closeMenu();
-    };
-
-    const labelHandler = () => {
         closeMenu();
     };
 
@@ -49,9 +47,9 @@ const Options = ({ id }: Props) => {
             </button>
             <Menu
                 id="options"
-                anchorEl={anchorEl}
+                anchorEl={menuEl}
                 getContentAnchorEl={null}
-                open={Boolean(anchorEl)}
+                open={Boolean(menuEl)}
                 onClose={closeMenu}
                 keepMounted
                 TransitionComponent={Fade}
@@ -61,9 +59,7 @@ const Options = ({ id }: Props) => {
                 }}
             >
                 {id && <MenuItem onClick={deleteHandler}>Delete note</MenuItem>}
-                <MenuItem id="label" onClick={labelHandler}>
-                    Add label
-                </MenuItem>
+                <LabelMenu />
                 <MenuItem id="copy" onClick={closeMenu}>
                     Make a copy
                 </MenuItem>

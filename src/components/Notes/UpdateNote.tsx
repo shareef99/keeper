@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useNote } from "../../context/NoteContext";
 import { getNoteRef } from "../../lib/helpers/notes";
 import { OptionalNote } from "../../lib/interface";
-import Options from "./Options";
+import Options from "./components/Options";
 
 interface Props {
     id: string;
