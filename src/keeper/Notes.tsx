@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import CreateNote from "../components/Notes/CreateNote";
 import Note from "../components/Notes/Note";
@@ -10,10 +11,36 @@ const Notes = (props: Props) => {
     const { logout } = useAuth();
     const notes = useFetchNotes();
 
+    // Constants
+    const nonExpandableElements = [
+        "title",
+        "content",
+        "more",
+        "more-button",
+        "cancel",
+        "options",
+        "options-container",
+        "label",
+        "copy",
+        "secret",
+        "create-note",
+    ];
+
+    // State
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
     return (
         <section>
-            <div>
-                <CreateNote />
+            <div
+                onClick={(e: any) => {
+                    console.log(e.target);
+
+                    if (nonExpandableElements.includes(e.target.id))
+                        return setIsExpanded(true);
+                    setIsExpanded(false);
+                }}
+            >
+                <CreateNote isExpanded={isExpanded} />
                 <ul className="flex justify-center flex-wrap items-start">
                     {notes.length < 1 && (
                         <Zoom in={true}>

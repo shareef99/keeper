@@ -6,7 +6,7 @@ import Fade from "@material-ui/core/Fade";
 import { useNote } from "../../context/NoteContext";
 
 interface Props {
-    id: string;
+    id?: string;
 }
 
 const Options = ({ id }: Props) => {
@@ -24,10 +24,28 @@ const Options = ({ id }: Props) => {
         setAnchorEl(null);
     };
 
+    const deleteHandler = () => {
+        deleteNote(id!);
+        closeMenu();
+    };
+
+    const labelHandler = () => {
+        closeMenu();
+    };
+
     return (
         <>
-            <button type="button" onClick={openMenu}>
-                <MdMoreVert size="1.65rem" />
+            {!id && (
+                <button
+                    className="font-medium text-lg"
+                    id="cancel"
+                    onClick={() => console.log("cancel")}
+                >
+                    Cancel
+                </button>
+            )}
+            <button type="button" id="more-button" onClick={openMenu}>
+                <MdMoreVert size="1.65rem" id="more" />
             </button>
             <Menu
                 id="options"
@@ -42,17 +60,16 @@ const Options = ({ id }: Props) => {
                     horizontal: "right",
                 }}
             >
-                <MenuItem
-                    onClick={() => {
-                        deleteNote(id);
-                        closeMenu();
-                    }}
-                >
-                    Delete note
+                {id && <MenuItem onClick={deleteHandler}>Delete note</MenuItem>}
+                <MenuItem id="label" onClick={labelHandler}>
+                    Add label
                 </MenuItem>
-                <MenuItem onClick={closeMenu}>Add label</MenuItem>
-                <MenuItem onClick={closeMenu}>Make a copy</MenuItem>
-                <MenuItem onClick={closeMenu}>Add to secret</MenuItem>
+                <MenuItem id="copy" onClick={closeMenu}>
+                    Make a copy
+                </MenuItem>
+                <MenuItem id="secret" onClick={closeMenu}>
+                    Add to secret
+                </MenuItem>
             </Menu>
         </>
     );

@@ -10,10 +10,9 @@ interface noteContextType {
 }
 
 const noteContextDefaultValues: noteContextType = {
-    addNote: (note: TitleNContent) => new Promise((resolve) => resolve()),
-    updateNote: (note: OptionalNote, id: string) =>
-        new Promise((resolve) => resolve()),
-    deleteNote: (id: string) => new Promise((resolve) => resolve()),
+    addNote: () => new Promise((resolve) => resolve()),
+    updateNote: () => new Promise((resolve) => resolve()),
+    deleteNote: () => new Promise((resolve) => resolve()),
 };
 
 const NoteContext = createContext<noteContextType>(noteContextDefaultValues);
@@ -65,6 +64,8 @@ export function NoteProvider({ children }: Props) {
 
         await noteRef.update(updatedNote);
     };
+
+    const addLabel = async () => {};
 
     const value = {
         addNote,

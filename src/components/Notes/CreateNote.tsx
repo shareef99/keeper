@@ -1,12 +1,14 @@
-import { FormEvent } from "react";
-import Zoom from "@material-ui/core/Zoom";
+import { FormEvent, useState } from "react";
 import { useRef } from "react";
 import { PlusButton } from "../atoms/Buttons";
 import { useNote } from "../../context/NoteContext";
+import Options from "./Options";
 
-interface Props {}
+interface Props {
+    isExpanded: boolean;
+}
 
-const CreateNote = (props: Props) => {
+const CreateNote = ({ isExpanded }: Props) => {
     // Context
     const { addNote } = useNote();
 
@@ -41,30 +43,36 @@ const CreateNote = (props: Props) => {
             onSubmit={submitNote}
             className="relative bg-gray-200 container sm:max-w-lg p-4 mx-auto mt-8 mb-5 rounded-lg 
                 shadow-2xl"
+            id="create-note"
         >
-            <div
-                id="title"
-                contentEditable={true}
-                ref={titleRef}
-                data-placeholder="Title"
-                className="w-full p-1 outline-none text-xl font-medium bg-gray-200 editableTitle"
-            />
+            {isExpanded && (
+                <div
+                    id="title"
+                    contentEditable={true}
+                    ref={titleRef}
+                    data-placeholder="Title"
+                    className="w-full p-1 outline-none text-xl font-medium bg-gray-200 editableTitle"
+                />
+            )}
             <div
                 id="content"
                 contentEditable={true}
                 ref={contentRef}
-                data-placeholder="Content..."
+                data-placeholder="Take a note..."
                 className="w-full p-1 outline-none text-lg bg-gray-200 editableContent"
             />
-            <Zoom in={true}>
-                <PlusButton
-                    className="flexCenter absolute right-[18px] -bottom-[18px] border-none rounded-full 
+            {isExpanded && (
+                <div id="options-container" className="mt-2 flex">
+                    <Options />
+                </div>
+            )}
+            <PlusButton
+                className="flexCenter absolute right-[18px] -bottom-[18px] border-none rounded-full 
                         w-9 h-9 outline-none text-white bg-yellow-400 hover:bg-yellow-500
                         focus:bg-yellow-500 transitionIn"
-                    iconSize="1.45rem"
-                    type="submit"
-                />
-            </Zoom>
+                iconSize="1.45rem"
+                type="submit"
+            />
         </form>
     );
 };

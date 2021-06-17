@@ -16,6 +16,7 @@ export const useFetchNotes = () => {
                     content: doc.data().content,
                     createdAt: doc.data().createdAt,
                     lastEditedAt: doc.data().lastEditedAt || "Original",
+                    label: doc.data().label,
                 }))
             )
         );
