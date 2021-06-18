@@ -1,3 +1,10 @@
 .MuiPaper-root {
     background-color: var(--gray-200) !important;
 }
+
+.disableMenuItem,
+.disableMenuItem:disabled {
+    // color: black !important;
+    font-size: 1.075rem !important;
+    opacity: 1 !important;
+}
