@@ -4,7 +4,7 @@ export interface NoteType {
     content: string;
     createdAt: string;
     lastEditedAt: string;
-    label: string;
+    labels: Array<string>;
 }
 
 export interface TitleNContent {

@@ -11,21 +11,6 @@ const Notes = (props: Props) => {
     const { logout } = useAuth();
     const notes = useFetchNotes();
 
-    // Constants
-    const nonExpandableElements = [
-        "title",
-        "content",
-        "more",
-        "more-button",
-        "cancel",
-        "options",
-        "options-container",
-        "label",
-        "copy",
-        "secret",
-        "create-note",
-    ];
-
     // State
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
@@ -33,8 +18,6 @@ const Notes = (props: Props) => {
         <section>
             <div
                 onClick={(e: any) => {
-                    console.log(e.target);
-
                     if (e.target.id === "notes-list")
                         return setIsExpanded(false);
                     setIsExpanded(true);

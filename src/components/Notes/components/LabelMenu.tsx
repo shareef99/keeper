@@ -1,13 +1,12 @@
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fade from "@material-ui/core/Fade";
-import { MouseEvent, useState } from "react";
+import { ChangeEvent, MouseEvent, useState } from "react";
 import Input from "@material-ui/core/Input";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { BiSearch } from "react-icons/bi";
+import { BiSearch, BiPlus } from "react-icons/bi";
 import { useEffect } from "react";
-import { width } from "@material-ui/system";
 
 interface Props {}
 
@@ -17,15 +16,20 @@ const LabelMenu = (props: Props) => {
     const [labels, setLabels] = useState<Array<string>>([
         "Blogs",
         "Notes",
+        "Note",
         "College",
         "School",
     ]);
     const [currentNoteLabel, setCurrentNoteLabel] = useState<Array<string>>([]);
+    const [searchLabel, setSearchLabel] = useState<string>("");
 
     // Effects
     useEffect(() => {
         console.log(currentNoteLabel);
     }, [currentNoteLabel]);
+    useEffect(() => {
+        console.log(searchLabel);
+    }, [searchLabel]);
 
     // Handlers
     const openLabelMenu = (e: MouseEvent<HTMLLIElement>) => {
@@ -34,6 +38,15 @@ const LabelMenu = (props: Props) => {
 
     const closeLabelMenu = () => {
         setLabelEl(null);
+    };
+
+    const labelChange = (e: ChangeEvent<HTMLInputElement>, label: string) => {
+        if (currentNoteLabel.includes(label)) {
+            return setCurrentNoteLabel(() =>
+                currentNoteLabel.filter((x) => x !== label)
+            );
+        }
+        setCurrentNoteLabel((prevLabels) => [...prevLabels, e.target.value]);
     };
 
     return (
@@ -56,46 +69,75 @@ const LabelMenu = (props: Props) => {
                 open={Boolean(labelEl)}
                 onClose={closeLabelMenu}
                 keepMounted
+                transitionDuration={300}
                 TransitionComponent={Fade}
                 anchorOrigin={{
                     vertical: "top",
                     horizontal: "right",
                 }}
+                autoFocus={false}
+                disableAutoFocusItem={true}
+                disableAutoFocus={true}
             >
                 <MenuItem disabled className="disableMenuItem">
                     Label note
                 </MenuItem>
                 <MenuItem>
-                    <Input placeholder="Enter label name" />
+                    <Input
+                        placeholder="Enter label name"
+                        onKeyDown={(e) => {
+                            e.stopPropagation();
+                        }}
+                        onChange={(e) => {
+                            setSearchLabel(e.target.value);
+                        }}
+                    />
                     <BiSearch />
                 </MenuItem>
-                {labels.map((label) => (
-                    <MenuItem>
-                        <FormControlLabel
-                            style={{ width: `100%` }}
-                            control={
-                                <Checkbox
-                                    color="default"
-                                    value={label}
-                                    onChange={(e) => {
-                                        if (currentNoteLabel.includes(label)) {
-                                            return setCurrentNoteLabel(
-                                                currentNoteLabel.filter(
-                                                    (x) => x !== label
-                                                )
-                                            );
-                                        }
-                                        setCurrentNoteLabel((prevLabels) => [
-                                            ...prevLabels,
-                                            e.target.value,
-                                        ]);
-                                    }}
+                {labels.map((label) => {
+                    return Boolean(searchLabel) ? (
+                        label
+                            .toLowerCase()
+                            .indexOf(searchLabel.toLowerCase()) !== -1 && (
+                            <MenuItem>
+                                <FormControlLabel
+                                    style={{ width: `100%` }}
+                                    control={
+                                        <Checkbox
+                                            color="default"
+                                            value={label}
+                                            onChange={(e) =>
+                                                labelChange(e, label)
+                                            }
+                                        />
+                                    }
+                                    label={label}
                                 />
-                            }
-                            label={label}
-                        />
+                            </MenuItem>
+                        )
+                    ) : (
+                        <MenuItem>
+                            <FormControlLabel
+                                style={{ width: `100%` }}
+                                control={
+                                    <Checkbox
+                                        color="default"
+                                        value={label}
+                                        onChange={(e) => labelChange(e, label)}
+                                    />
+                                }
+                                label={label}
+                            />
+                        </MenuItem>
+                    );
+                })}
+                {Boolean(searchLabel) && (
+                    <MenuItem className="space-x-2">
+                        <BiPlus size="1.25rem" />
+                        <span>Create </span>
+                        <span>{searchLabel}</span>
                     </MenuItem>
-                ))}
+                )}
             </Menu>
         </>
     );
