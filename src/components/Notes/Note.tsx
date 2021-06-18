@@ -12,6 +12,7 @@ interface Props {
     index: number;
     title: string;
     content: string;
+    labels: Array<string>;
 }
 
 const Note = (props: Props) => {
@@ -32,6 +33,8 @@ const Note = (props: Props) => {
         }
     };
 
+    // Using callback because vs-code suggested in comments of useEffect, and useEffect was rending
+    // too many times
     const handleSetNote = useCallback((note: OptionalNote) => {
         setNote(note);
     }, []);

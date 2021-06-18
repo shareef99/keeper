@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext } from "react";
-import { getCurrentTime, getNoteRef } from "../lib/helpers/notes";
+import { getCurrentTime, getNoteRef, getUserRef } from "../lib/helpers/notes";
 import { OptionalNote, TitleNContent } from "../lib/interface";
 import { useAuth } from "./AuthContext";
 
@@ -7,12 +7,14 @@ interface noteContextType {
     deleteNote: (id: string) => Promise<void>;
     addNote: (note: TitleNContent) => Promise<void>;
     updateNote: (note: OptionalNote, id: string) => Promise<void>;
+    addLabel: (label: string) => Promise<void>;
 }
 
 const noteContextDefaultValues: noteContextType = {
     addNote: () => new Promise((resolve) => resolve()),
     updateNote: () => new Promise((resolve) => resolve()),
     deleteNote: () => new Promise((resolve) => resolve()),
+    addLabel: () => new Promise((resolve) => resolve()),
 };
 
 const NoteContext = createContext<noteContextType>(noteContextDefaultValues);
@@ -65,12 +67,20 @@ export function NoteProvider({ children }: Props) {
         await noteRef.update(updatedNote);
     };
 
-    const addLabel = async () => {};
+    const addLabel = async (label: string) => {
+        const userRef = getUserRef(user?.uid!);
+        const prevLabels = (await userRef.get()).data()?.labels || [];
+        const newLabels = [...prevLabels, label];
+        userRef.update({ labels: newLabels });
+    };
+
+    // const addLabelToNote = async (label: string) => {};
 
     const value = {
         addNote,
         updateNote,
         deleteNote,
+        addLabel,
     };
 
     return (

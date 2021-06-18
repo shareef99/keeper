@@ -29,4 +29,5 @@ export interface UserType {
     lastSignInTime: string;
     phoneNumber?: number;
     isAnonymous?: boolean;
+    labels?: Array<string>;
 }

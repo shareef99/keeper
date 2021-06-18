@@ -43,6 +43,7 @@ const Notes = (props: Props) => {
                             index={index}
                             title={note.title}
                             content={note.content}
+                            labels={note.labels}
                         />
                     ))}
                 </ul>

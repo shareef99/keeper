@@ -7,13 +7,17 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { BiSearch, BiPlus } from "react-icons/bi";
 import { useEffect } from "react";
+import { useNote } from "../../../context/NoteContext";
 
 interface Props {}
 
 const LabelMenu = (props: Props) => {
+    // Context
+    const { addLabel } = useNote();
+
     // State
     const [labelEl, setLabelEl] = useState<null | HTMLElement>(null);
-    const [labels, setLabels] = useState<Array<string>>([
+    const [labels] = useState<Array<string>>([
         "Blogs",
         "Notes",
         "Note",
@@ -132,7 +136,10 @@ const LabelMenu = (props: Props) => {
                     );
                 })}
                 {Boolean(searchLabel) && (
-                    <MenuItem className="space-x-2">
+                    <MenuItem
+                        className="space-x-2"
+                        onClick={() => addLabel(searchLabel)}
+                    >
                         <BiPlus size="1.25rem" />
                         <span>Create </span>
                         <span>{searchLabel}</span>

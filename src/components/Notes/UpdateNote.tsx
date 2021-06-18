@@ -97,16 +97,19 @@ const UpdateNote = (props: Props) => {
                     ref={contentRef}
                 />
                 <div className="mt-8 py-3 flex flex-col space-y-2">
-                    {lastEditedAt && (
-                        <div className="self-end">
-                            <span>
-                                Edited{" "}
-                                <time className="font-medium text-black">
-                                    {lastEditedAt}
-                                </time>
-                            </span>
-                        </div>
-                    )}
+                    <div className="flex ">
+                        <div className="mr-auto">hello</div>
+                        {lastEditedAt && (
+                            <div className="">
+                                <span>
+                                    Edited{" "}
+                                    <time className="font-medium text-black">
+                                        {lastEditedAt}
+                                    </time>
+                                </span>
+                            </div>
+                        )}
+                    </div>
                     <div className="flex items-center space-x-4">
                         <div className="mr-auto rowCenter">
                             <span className="">

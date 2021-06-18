@@ -42,8 +42,8 @@ const Options = ({ id }: Props) => {
                     Cancel
                 </button>
             )}
-            <button type="button" id="more-button" onClick={openMenu}>
-                <MdMoreVert size="1.65rem" id="more" />
+            <button type="button" onClick={openMenu}>
+                <MdMoreVert size="1.65rem" />
             </button>
             <Menu
                 id="options"
