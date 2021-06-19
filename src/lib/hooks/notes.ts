@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { getNotesRef } from "../helpers/notes";
+import { getNotesRef, getUserRef } from "../helpers/notes";
 import { NoteType } from "../interface";
 
 export const useFetchNotes = () => {
@@ -23,4 +23,17 @@ export const useFetchNotes = () => {
     }, [user?.uid]);
 
     return notes;
+};
+
+export const useFetchLabels = () => {
+    const [labels, setLabels] = useState<Array<string>>([]);
+    const { user } = useAuth();
+
+    useEffect(() => {
+        getUserRef(user?.uid!).onSnapshot((snap) =>
+            setLabels(snap.data()?.labels || [])
+        );
+    }, [user?.uid]);
+
+    return labels;
 };

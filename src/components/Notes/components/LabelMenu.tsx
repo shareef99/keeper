@@ -8,22 +8,20 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { BiSearch, BiPlus } from "react-icons/bi";
 import { useEffect } from "react";
 import { useNote } from "../../../context/NoteContext";
+import { useFetchLabels } from "../../../lib/hooks/notes";
 
-interface Props {}
+interface Props {
+    closeMenu: () => void;
+}
 
-const LabelMenu = (props: Props) => {
+const LabelMenu = ({ closeMenu }: Props) => {
+    const labels = useFetchLabels();
+
     // Context
     const { addLabel } = useNote();
 
     // State
     const [labelEl, setLabelEl] = useState<null | HTMLElement>(null);
-    const [labels] = useState<Array<string>>([
-        "Blogs",
-        "Notes",
-        "Note",
-        "College",
-        "School",
-    ]);
     const [currentNoteLabel, setCurrentNoteLabel] = useState<Array<string>>([]);
     const [searchLabel, setSearchLabel] = useState<string>("");
 
@@ -38,6 +36,7 @@ const LabelMenu = (props: Props) => {
     // Handlers
     const openLabelMenu = (e: MouseEvent<HTMLLIElement>) => {
         setLabelEl(e.currentTarget);
+        closeMenu();
     };
 
     const closeLabelMenu = () => {
@@ -69,16 +68,11 @@ const LabelMenu = (props: Props) => {
             <Menu
                 id="label-menu"
                 anchorEl={labelEl}
-                getContentAnchorEl={null}
                 open={Boolean(labelEl)}
                 onClose={closeLabelMenu}
                 keepMounted
                 transitionDuration={300}
                 TransitionComponent={Fade}
-                anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                }}
                 autoFocus={false}
                 disableAutoFocusItem={true}
                 disableAutoFocus={true}
