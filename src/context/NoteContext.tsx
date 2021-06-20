@@ -8,6 +8,11 @@ interface noteContextType {
     addNote: (note: TitleNContent) => Promise<void>;
     updateNote: (note: OptionalNote, id: string) => Promise<void>;
     addLabel: (label: string) => Promise<void>;
+    updateLabelsOfNote: (
+        labels: string,
+        id: string,
+        state: boolean
+    ) => Promise<void>;
 }
 
 const noteContextDefaultValues: noteContextType = {
@@ -15,6 +20,7 @@ const noteContextDefaultValues: noteContextType = {
     updateNote: () => new Promise((resolve) => resolve()),
     deleteNote: () => new Promise((resolve) => resolve()),
     addLabel: () => new Promise((resolve) => resolve()),
+    updateLabelsOfNote: () => new Promise((resolve) => resolve()),
 };
 
 const NoteContext = createContext<noteContextType>(noteContextDefaultValues);
@@ -64,23 +70,43 @@ export function NoteProvider({ children }: Props) {
             lastEditedAt,
         };
 
+        console.log("updating notes");
+
         await noteRef.update(updatedNote);
     };
 
     const addLabel = async (label: string) => {
         const userRef = getUserRef(user?.uid!);
-        const prevLabels = (await userRef.get()).data()?.labels || [];
+        const prevLabels = (await userRef.get()).data()?.userLabels || [];
+        // End function if label already exists
+        if (prevLabels.includes(label)) return;
         const newLabels = [...prevLabels, label];
-        userRef.update({ labels: newLabels });
+        userRef.update({ userLabels: newLabels });
     };
 
-    // const addLabelToNote = async (label: string) => {};
+    const updateLabelsOfNote = async (
+        label: string,
+        id: string,
+        state: boolean
+    ) => {
+        const noteRef = getNoteRef(user?.uid!, id);
+        const prevLabels = (await noteRef.get()).data()?.noteLabels || [];
+        // if state is true add the label else remove
+        if (state) {
+            const noteLabels = [...prevLabels, label];
+            await noteRef.update({ noteLabels });
+        } else {
+            const noteLabels = prevLabels.filter((x: string) => x !== label);
+            await noteRef.update({ noteLabels });
+        }
+    };
 
     const value = {
         addNote,
         updateNote,
         deleteNote,
         addLabel,
+        updateLabelsOfNote,
     };
 
     return (

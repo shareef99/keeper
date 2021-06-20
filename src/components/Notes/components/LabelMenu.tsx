@@ -1,37 +1,30 @@
+import { ChangeEvent, MouseEvent, useState } from "react";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fade from "@material-ui/core/Fade";
-import { ChangeEvent, MouseEvent, useState } from "react";
 import Input from "@material-ui/core/Input";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { BiSearch, BiPlus } from "react-icons/bi";
-import { useEffect } from "react";
 import { useNote } from "../../../context/NoteContext";
-import { useFetchLabels } from "../../../lib/hooks/notes";
+import { useFetchLabels, useFetchNoteLabels } from "../../../lib/hooks/notes";
 
 interface Props {
     closeMenu: () => void;
+    id: string;
 }
 
-const LabelMenu = ({ closeMenu }: Props) => {
-    const labels = useFetchLabels();
+const LabelMenu = ({ closeMenu, id }: Props) => {
+    const userLabels = useFetchLabels();
+    const noteLabels = useFetchNoteLabels(id);
 
     // Context
-    const { addLabel } = useNote();
+    const { addLabel, updateLabelsOfNote } = useNote();
 
     // State
     const [labelEl, setLabelEl] = useState<null | HTMLElement>(null);
-    const [currentNoteLabel, setCurrentNoteLabel] = useState<Array<string>>([]);
+    // const [currentNoteLabel, setCurrentNoteLabel] = useState<Array<string>>([]);
     const [searchLabel, setSearchLabel] = useState<string>("");
-
-    // Effects
-    useEffect(() => {
-        console.log(currentNoteLabel);
-    }, [currentNoteLabel]);
-    useEffect(() => {
-        console.log(searchLabel);
-    }, [searchLabel]);
 
     // Handlers
     const openLabelMenu = (e: MouseEvent<HTMLLIElement>) => {
@@ -44,12 +37,10 @@ const LabelMenu = ({ closeMenu }: Props) => {
     };
 
     const labelChange = (e: ChangeEvent<HTMLInputElement>, label: string) => {
-        if (currentNoteLabel.includes(label)) {
-            return setCurrentNoteLabel(() =>
-                currentNoteLabel.filter((x) => x !== label)
-            );
-        }
-        setCurrentNoteLabel((prevLabels) => [...prevLabels, e.target.value]);
+        const state = e.target.checked;
+        console.log(state);
+
+        updateLabelsOfNote(label, id, state);
     };
 
     return (
@@ -92,7 +83,7 @@ const LabelMenu = ({ closeMenu }: Props) => {
                     />
                     <BiSearch />
                 </MenuItem>
-                {labels.map((label) => {
+                {userLabels.map((label) => {
                     return Boolean(searchLabel) ? (
                         label
                             .toLowerCase()
@@ -107,6 +98,7 @@ const LabelMenu = ({ closeMenu }: Props) => {
                                             onChange={(e) =>
                                                 labelChange(e, label)
                                             }
+                                            checked={noteLabels.includes(label)}
                                         />
                                     }
                                     label={label}
@@ -122,6 +114,7 @@ const LabelMenu = ({ closeMenu }: Props) => {
                                         color="default"
                                         value={label}
                                         onChange={(e) => labelChange(e, label)}
+                                        checked={noteLabels.includes(label)}
                                     />
                                 }
                                 label={label}

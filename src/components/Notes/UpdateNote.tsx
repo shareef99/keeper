@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNote } from "../../context/NoteContext";
 import { getNoteRef } from "../../lib/helpers/notes";
+import { useFetchNoteLabels } from "../../lib/hooks/notes";
 import { OptionalNote } from "../../lib/interface";
 import Options from "./components/Options";
 
@@ -12,10 +13,14 @@ interface Props {
     content: string;
     onSetNote: (note: OptionalNote) => void;
     onClose: () => void;
+    labels: Array<string>;
 }
 
 const UpdateNote = (props: Props) => {
     const { id, title, content, onSetNote, onClose } = props;
+
+    const noteLabels = useFetchNoteLabels(id);
+
     // Refs
     const titleRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
@@ -97,8 +102,17 @@ const UpdateNote = (props: Props) => {
                     ref={contentRef}
                 />
                 <div className="mt-8 py-3 flex flex-col space-y-2">
-                    <div className="flex ">
-                        <div className="mr-auto">hello</div>
+                    <div className="flex items-center space-x-4 flex-wrap space-y-4">
+                        <div className="mr-auto space-x-2 space-y-2">
+                            {noteLabels.map((label, index) => (
+                                <span
+                                    key={index}
+                                    className="bg-gray-500 rounded-2xl px-3 py-1"
+                                >
+                                    {label}
+                                </span>
+                            ))}
+                        </div>
                         {lastEditedAt && (
                             <div className="">
                                 <span>

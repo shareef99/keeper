@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { getNotesRef, getUserRef } from "../helpers/notes";
+import { getNoteRef, getNotesRef, getUserRef } from "../helpers/notes";
 import { NoteType } from "../interface";
 
 export const useFetchNotes = () => {
@@ -16,7 +16,7 @@ export const useFetchNotes = () => {
                     content: doc.data().content,
                     createdAt: doc.data().createdAt,
                     lastEditedAt: doc.data().lastEditedAt || "Original",
-                    labels: doc.data().labels,
+                    noteLabels: doc.data().noteLabels,
                 }))
             )
         );
@@ -26,14 +26,27 @@ export const useFetchNotes = () => {
 };
 
 export const useFetchLabels = () => {
-    const [labels, setLabels] = useState<Array<string>>([]);
+    const [userLabel, setUserLabels] = useState<Array<string>>([]);
     const { user } = useAuth();
 
     useEffect(() => {
         getUserRef(user?.uid!).onSnapshot((snap) =>
-            setLabels(snap.data()?.labels || [])
+            setUserLabels(snap.data()?.userLabels || [])
         );
     }, [user?.uid]);
 
-    return labels;
+    return userLabel;
+};
+
+export const useFetchNoteLabels = (id: string) => {
+    const [noteLabels, setNoteLabels] = useState<Array<string>>([]);
+    const { user } = useAuth();
+
+    useEffect(() => {
+        getNoteRef(user?.uid!, id).onSnapshot((snap) =>
+            setNoteLabels(snap.data()?.noteLabels || [])
+        );
+    }, [user?.uid, id]);
+
+    return noteLabels;
 };

@@ -16,7 +16,7 @@ interface Props {
 }
 
 const Note = (props: Props) => {
-    const { id, index, title, content } = props;
+    const { id, index, title, content, labels } = props;
 
     // Context
     const { deleteNote, updateNote } = useNote();
@@ -75,6 +75,7 @@ const Note = (props: Props) => {
                     content={content}
                     onSetNote={handleSetNote}
                     onClose={handleClose}
+                    labels={labels}
                 />
             </Dialog>
         </>

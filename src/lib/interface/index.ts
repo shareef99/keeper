@@ -4,7 +4,7 @@ export interface NoteType {
     content: string;
     createdAt: string;
     lastEditedAt: string;
-    labels: Array<string>;
+    noteLabels: Array<string>;
 }
 
 export interface TitleNContent {
@@ -29,5 +29,5 @@ export interface UserType {
     lastSignInTime: string;
     phoneNumber?: number;
     isAnonymous?: boolean;
-    labels?: Array<string>;
+    userLabels?: Array<string>;
 }

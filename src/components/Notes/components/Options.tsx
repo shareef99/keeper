@@ -59,7 +59,7 @@ const Options = ({ id }: Props) => {
                 }}
             >
                 {id && <MenuItem onClick={deleteHandler}>Delete note</MenuItem>}
-                <LabelMenu closeMenu={closeMenu} />
+                <LabelMenu closeMenu={closeMenu} id={id!} />
                 <MenuItem id="copy" onClick={closeMenu}>
                     Make a copy
                 </MenuItem>
