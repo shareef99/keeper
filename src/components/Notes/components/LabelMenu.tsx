@@ -8,23 +8,30 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { BiSearch, BiPlus } from "react-icons/bi";
 import { useNote } from "../../../context/NoteContext";
 import { useFetchLabels, useFetchNoteLabels } from "../../../lib/hooks/notes";
+import { useEffect } from "react";
 
 interface Props {
     closeMenu: () => void;
-    id: string;
+    id?: string;
 }
 
 const LabelMenu = ({ closeMenu, id }: Props) => {
     const userLabels = useFetchLabels();
-    const noteLabels = useFetchNoteLabels(id);
+
+    let noteLabels = useFetchNoteLabels(id);
 
     // Context
-    const { addLabel, updateLabelsOfNote } = useNote();
+    const { addLabel, updateLabelsOfNote, updateInitialNoteLabels } = useNote();
 
     // State
     const [labelEl, setLabelEl] = useState<null | HTMLElement>(null);
-    // const [currentNoteLabel, setCurrentNoteLabel] = useState<Array<string>>([]);
+    const [currentNoteLabels, setCurrentNoteLabels] =
+        useState<Array<string>>(noteLabels);
     const [searchLabel, setSearchLabel] = useState<string>("");
+
+    useEffect(() => {
+        console.log(currentNoteLabels);
+    }, [currentNoteLabels]);
 
     // Handlers
     const openLabelMenu = (e: MouseEvent<HTMLLIElement>) => {
@@ -38,9 +45,18 @@ const LabelMenu = ({ closeMenu, id }: Props) => {
 
     const labelChange = (e: ChangeEvent<HTMLInputElement>, label: string) => {
         const state = e.target.checked;
-        console.log(state);
 
-        updateLabelsOfNote(label, id, state);
+        if (id) {
+            return updateLabelsOfNote(label, id, state);
+        }
+        updateInitialNoteLabels(label, state);
+
+        if (state) {
+            return setCurrentNoteLabels((prevLabels) => [...prevLabels, label]);
+        }
+        setCurrentNoteLabels((prevLabels) =>
+            prevLabels.filter((x) => x !== label)
+        );
     };
 
     return (
@@ -98,7 +114,13 @@ const LabelMenu = ({ closeMenu, id }: Props) => {
                                             onChange={(e) =>
                                                 labelChange(e, label)
                                             }
-                                            checked={noteLabels.includes(label)}
+                                            checked={
+                                                noteLabels.length === 0
+                                                    ? currentNoteLabels.includes(
+                                                          label
+                                                      )
+                                                    : noteLabels.includes(label)
+                                            }
                                         />
                                     }
                                     label={label}
@@ -114,7 +136,13 @@ const LabelMenu = ({ closeMenu, id }: Props) => {
                                         color="default"
                                         value={label}
                                         onChange={(e) => labelChange(e, label)}
-                                        checked={noteLabels.includes(label)}
+                                        checked={
+                                            noteLabels.length > 0
+                                                ? noteLabels.includes(label)
+                                                : currentNoteLabels.includes(
+                                                      label
+                                                  )
+                                        }
                                     />
                                 }
                                 label={label}

@@ -10,7 +10,7 @@ interface Props {
 
 const CreateNote = ({ isExpanded }: Props) => {
     // Context
-    const { addNote } = useNote();
+    const { addNote, initialNoteLabels } = useNote();
 
     // Refs
     const contentRef = useRef<HTMLDivElement>(null);
@@ -62,8 +62,22 @@ const CreateNote = ({ isExpanded }: Props) => {
                 className="w-full p-1 outline-none text-lg bg-gray-200 editableContent"
             />
             {isExpanded && (
-                <div id="options-container" className="mt-2 flex">
-                    <Options />
+                <div id="options-container" className="mt-2 space-y-2">
+                    <div className="flex items-center space-x-4 flex-wrap space-y-4">
+                        <div className="mr-auto space-x-2 space-y-2">
+                            {initialNoteLabels.map((label, index) => (
+                                <span
+                                    key={index}
+                                    className="bg-gray-400 rounded-2xl px-3 py-1"
+                                >
+                                    {label}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex">
+                        <Options />
+                    </div>
                 </div>
             )}
             <PlusButton

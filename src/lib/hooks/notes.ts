@@ -38,14 +38,18 @@ export const useFetchLabels = () => {
     return userLabel;
 };
 
-export const useFetchNoteLabels = (id: string) => {
+export const useFetchNoteLabels = (id: string | undefined) => {
     const [noteLabels, setNoteLabels] = useState<Array<string>>([]);
     const { user } = useAuth();
 
     useEffect(() => {
-        getNoteRef(user?.uid!, id).onSnapshot((snap) =>
-            setNoteLabels(snap.data()?.noteLabels || [])
-        );
+        if (id) {
+            getNoteRef(user?.uid!, id).onSnapshot((snap) =>
+                setNoteLabels(snap.data()?.noteLabels || [])
+            );
+        } else {
+            return setNoteLabels([]);
+        }
     }, [user?.uid, id]);
 
     return noteLabels;

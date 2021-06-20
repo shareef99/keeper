@@ -1,6 +1,6 @@
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { getCurrentTime, getNoteRef, getUserRef } from "../lib/helpers/notes";
-import { OptionalNote, TitleNContent } from "../lib/interface";
+import { NoteType, OptionalNote, TitleNContent } from "../lib/interface";
 import { useAuth } from "./AuthContext";
 
 interface noteContextType {
@@ -13,6 +13,8 @@ interface noteContextType {
         id: string,
         state: boolean
     ) => Promise<void>;
+    updateInitialNoteLabels: (label: string, state: boolean) => void;
+    initialNoteLabels: Array<string>;
 }
 
 const noteContextDefaultValues: noteContextType = {
@@ -21,6 +23,8 @@ const noteContextDefaultValues: noteContextType = {
     deleteNote: () => new Promise((resolve) => resolve()),
     addLabel: () => new Promise((resolve) => resolve()),
     updateLabelsOfNote: () => new Promise((resolve) => resolve()),
+    updateInitialNoteLabels: () => {},
+    initialNoteLabels: [],
 };
 
 const NoteContext = createContext<noteContextType>(noteContextDefaultValues);
@@ -35,6 +39,9 @@ interface Props {
 
 export function NoteProvider({ children }: Props) {
     const { user } = useAuth();
+    const [initialNoteLabels, setInitialNoteLabels] = useState<Array<string>>(
+        []
+    );
 
     const deleteNote = async (id: string) => {
         await getNoteRef(user?.uid!, id).delete();
@@ -50,7 +57,15 @@ export function NoteProvider({ children }: Props) {
         }
 
         const noteRef = getNoteRef(user?.uid!, id);
-        await noteRef.set({ id, title, content, createdAt });
+        const newNote: NoteType = {
+            id,
+            title,
+            content,
+            createdAt,
+            noteLabels: initialNoteLabels,
+            lastEditedAt: "Original",
+        };
+        await noteRef.set(newNote);
     };
 
     const updateNote = async (note: OptionalNote, id: string) => {
@@ -101,12 +116,23 @@ export function NoteProvider({ children }: Props) {
         }
     };
 
+    const updateInitialNoteLabels = (label: string, state: boolean) => {
+        if (state) {
+            return setInitialNoteLabels((prevLabels) => [...prevLabels, label]);
+        }
+        setInitialNoteLabels((prevLabels) =>
+            prevLabels.filter((x) => x !== label)
+        );
+    };
+
     const value = {
         addNote,
         updateNote,
         deleteNote,
         addLabel,
         updateLabelsOfNote,
+        updateInitialNoteLabels,
+        initialNoteLabels,
     };
 
     return (
